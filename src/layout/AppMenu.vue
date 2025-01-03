@@ -9,6 +9,27 @@ const model = ref([
         items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/' }]
     },
     {
+        label: 'Tasks',
+        items: [
+            { label: 'All', icon: 'pi pi-fw pi-user', to: '/tasks/all' },
+            { label: 'Missing Facility', icon: 'pi pi-fw pi-user', to: '/' },
+            { label: 'Manual Schedule', icon: 'pi pi-fw pi-calendar', to: '/' },
+            { label: 'Manual Export', icon: 'pi pi-fw pi-sync', to: '/' },
+        ]
+    },
+    {
+        label: 'Admin',
+        items: [
+            { label: 'Users', icon: 'pi pi-fw pi-user', to: '/users/list' },
+        ]
+    },
+    {
+        label: 'Global Admin',
+        items: [
+            { label: 'Tenants', icon: 'pi pi-fw pi-globe', to: '/tenants/list' },
+        ]
+    },
+    {
         label: 'UI Components',
         items: [
             { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', to: '/uikit/formlayout' },
