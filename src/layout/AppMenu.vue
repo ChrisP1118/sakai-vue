@@ -26,7 +26,7 @@ const model = ref([
     {
         label: 'Global Admin',
         items: [
-            { label: 'Tenants', icon: 'pi pi-fw pi-globe', to: '/tenants/list' },
+            { label: 'Tenants', icon: 'pi pi-fw pi-globe', to: '/tenants/all' },
         ]
     },
     {

@@ -75,10 +75,6 @@ function onFilter(event) {
     loadQuery(event);
 }
 
-function onUpdateRows(event) {
-    console.log('Update Rows');
-}
-
 const loadQuery = (event, appendResults) => {
   console.log('Load lazy');
   console.log(event);
@@ -135,7 +131,6 @@ const loadQuery = (event, appendResults) => {
                 @page="onPage"
                 @sort="onSort"
                 @filter="onFilter"
-                @update:rows="onUpdateRows"
                 v-model:filters="filters"
                 :paginator="true"
                 :first="tableData.first"
