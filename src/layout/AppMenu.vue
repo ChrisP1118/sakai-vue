@@ -12,9 +12,6 @@ const model = ref([
         label: 'Tasks',
         items: [
             { label: 'All', icon: 'pi pi-fw pi-user', to: '/tasks/all' },
-            { label: 'Missing Facility', icon: 'pi pi-fw pi-user', to: '/' },
-            { label: 'Manual Schedule', icon: 'pi pi-fw pi-calendar', to: '/' },
-            { label: 'Manual Export', icon: 'pi pi-fw pi-sync', to: '/' },
         ]
     },
     {

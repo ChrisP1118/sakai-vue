@@ -1,6 +1,10 @@
 <script setup>
 import { FilterMatchMode } from '@primevue/core';
 import { onMounted, ref, computed } from 'vue';
+import { useRouter, useRoute } from 'vue-router'
+
+const router = useRouter()
+const route = useRoute()
 
 const dt = ref();
 const tableData = ref({
@@ -114,14 +118,20 @@ const loadQuery = (event, appendResults) => {
   });
 };
 
+function onRowClick(event) {
+    console.log('Row click');
+    console.log(event);
+
+    var item = pagedItems.value[event.index];
+    router.push({ path: '/tenants/' + item.id });
+}
+
 
 </script>
 
 <template>
     <div>
         <div class="card">
-
-            {{ tableData }}
 
             <DataTable
                 ref="dt"
@@ -142,17 +152,18 @@ const loadQuery = (event, appendResults) => {
                 :totalRecords="tableData.totalRecords"
                 :loading="tableData.loading"
                 filterDisplay="row"
+                @row-click="onRowClick"
             >
                 <template #header>
-                    <div class="flex flex-wrap gap-2 items-center justify-between">
+                    <!-- <div class="flex flex-wrap gap-2 items-center justify-between">
                         <h4 class="m-0">Tenants</h4>
                         <IconField>
                             <InputIcon>
                                 <i class="pi pi-search" />
                             </InputIcon>
-                            <!-- <InputText v-model="filters['global'].value" placeholder="Search..." /> -->
+                            <InputText v-model="filters['global'].value" placeholder="Search..." />
                         </IconField>
-                    </div>
+                    </div> -->
                 </template>
 
                 <Column selectionMode="multiple" style="width: 3rem" :exportable="false"></Column>
