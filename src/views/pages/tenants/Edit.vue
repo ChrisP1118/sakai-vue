@@ -47,19 +47,29 @@ const onFormSubmit = (e) => {
             'Content-Type': 'application/json'
         }
     })
-    .then(response => response.json())
-    .then(response => {
+    .then(response =>  response.json().then(data => ({status: response.status, body: data})))
+    .then(response => 
+    {
         console.log(response);
-        item.value = response;
+        if (response.status >= 200 && response.status < 300) {
+            item.value = response.body;
 
-        isSaving.value = false;
+            isSaving.value = false;
 
-        toast.add({
-            severity: 'success',
-            summary: 'Item successfully saved.',
-            life: 3000
-        });        
+            toast.add({
+                severity: 'success',
+                summary: 'Item successfully saved.',
+                life: 3000
+            });        
+        } else {
+            toast.add({
+                severity: 'error',
+                summary: 'Error saving item.',
+                life: 3000
+            });
+        }
     });
+
 };
 
 const formResolver = ({ values }) => {
@@ -111,6 +121,13 @@ const formResolver = ({ values }) => {
                                 <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">{{ $field.error?.message }}</Message>
                             </FormField>
                         </div>                    
+                        <!-- <div class="flex flex-col gap-2">
+                            <FormField v-slot="$field" name="eTag">
+                                <label for="eTag">eTag</label>
+                                <InputText id="eTag" name="eTag" type="text" />
+                                <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">{{ $field.error?.message }}</Message>
+                            </FormField>
+                        </div>                     -->
                         <!-- <div class="flex flex-col gap-2">
                             <label for="isActive">Active</label>
                             <ToggleSwitch id="isActive" v-model="item.isActive" />
