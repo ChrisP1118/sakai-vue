@@ -126,7 +126,6 @@ function onRowClick(event) {
     router.push({ path: '/tenants/' + item.id });
 }
 
-
 </script>
 
 <template>
@@ -155,15 +154,16 @@ function onRowClick(event) {
                 @row-click="onRowClick"
             >
                 <template #header>
-                    <!-- <div class="flex flex-wrap gap-2 items-center justify-between">
-                        <h4 class="m-0">Tenants</h4>
+                    <div class="flex flex-wrap gap-2 items-center justify-between">
                         <IconField>
                             <InputIcon>
                                 <i class="pi pi-search" />
                             </InputIcon>
-                            <InputText v-model="filters['global'].value" placeholder="Search..." />
+                            <InputText placeholder="Search..." />
                         </IconField>
-                    </div> -->
+
+                        <Button label="New Tenant" icon="pi pi-plus-circle" severity="secondary" as="router-link" to="/tenants/new" />
+                    </div>
                 </template>
 
                 <Column selectionMode="multiple" style="width: 3rem" :exportable="false"></Column>

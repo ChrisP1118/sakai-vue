@@ -1,33 +1,21 @@
 <script setup>
 import { onMounted, ref, computed } from 'vue';
-import { useRouter, useRoute } from 'vue-router'
 import { useToast } from 'primevue/usetoast';
 import Fields from './Fields.vue';
+import { useRouter, useRoute } from 'vue-router'
 
 const router = useRouter()
 const route = useRoute()
+
 const toast = useToast();
 
-const item = ref();
+const item = ref({
+    name: 'New Tenant'
+});
 const isSaving = ref(false);
 
 onMounted(() => {
-    loadItem();
 });
-
-function loadItem() {
-    fetch('https://localhost:7067/api/v1/tenant/' + route.params.id, {
-        method: 'GET',
-        headers: {
-            'Authorization': 'Basic ' + btoa('cwilson:abcd1234')
-        }
-    })
-    .then(response => response.json())
-    .then(response => {
-        console.log(response);
-        item.value = response;
-    });
-}
 
 function onFormSubmit(values) {
     console.log('Fields form submit');
@@ -38,8 +26,8 @@ function onFormSubmit(values) {
 
     isSaving.value = true;
 
-    fetch('https://localhost:7067/api/v1/tenant/' + route.params.id, {
-        method: 'PUT',
+    fetch('https://localhost:7067/api/v1/tenant', {
+        method: 'POST',
         body: JSON.stringify(item.value),
         headers: {
             'Authorization': 'Basic ' + btoa('cwilson:abcd1234'),
@@ -59,7 +47,9 @@ function onFormSubmit(values) {
                 severity: 'success',
                 summary: 'Item successfully saved.',
                 life: 3000
-            });        
+            });
+
+            router.push({ path: '/tenants/' + item.value.id });
         } else {
             toast.add({
                 severity: 'error',
