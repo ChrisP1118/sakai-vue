@@ -1,10 +1,79 @@
 <script setup>
 import FloatingConfigurator from '@/components/FloatingConfigurator.vue';
 import { ref } from 'vue';
+import { Form } from '@primevue/forms';
+import { useToast } from 'primevue/usetoast';
+import { useAuthStore } from '@/stores/auth.js';
+import { useRouter, useRoute } from 'vue-router'
 
-const email = ref('');
-const password = ref('');
-const checked = ref(false);
+const router = useRouter()
+const route = useRoute()
+const toast = useToast();
+const authStore = useAuthStore();
+
+const formFields = ref({
+    username: 'cwilson',
+    password: 'abcd1234',
+    remember: false
+})
+const isLoggingIn = ref(false);
+const isInvalidLogin = ref(false);
+
+const formResolver = ({ values }) => {
+    const errors = { name: [] };
+
+    if (!values.username)
+        errors.name.push({ type: 'required', message: 'Email address is required' });
+
+    if (values.username && values.username.length < 3)
+        errors.name.push({ type: 'Minimum', message: 'Email must be at least 3 characters' });
+
+    if (!values.password)
+        errors.name.push({ type: 'required', message: 'Password is required' });
+
+    return {
+        errors,
+        values // This has to be included due to a bug in PrimeVue: https://github.com/primefaces/primevue/issues/7031
+    };
+}
+
+const onLogIn = (e) => {
+    if (!e.valid)
+        return;
+
+    console.log('Logging in...');
+
+    isLoggingIn.value = true;
+    isInvalidLogin.value = false;
+
+    fetch(import.meta.env.VITE_API_BASE_URL + '/v1/account/logIn', {
+        method: 'POST',
+        body: JSON.stringify({
+            username: e.values.username,
+            password: e.values.password
+        }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response =>  response.json().then(data => ({status: response.status, body: data})))
+    .then(response => {
+
+        console.log(response);
+
+        if (response.status == 200 && response.body.token) {
+            authStore.logIn(e.values.username, response.body.token);
+
+            router.push({ path: '/' });
+        } else if (response.status == 403) {
+            isInvalidLogin.value = true;
+        } else {
+            isInvalidLogin.value = true;
+        }
+
+        isLoggingIn.value = false;
+    });
+}
 </script>
 
 <template>
@@ -31,25 +100,38 @@ const checked = ref(false);
                                 />
                             </g>
                         </svg>
-                        <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">Welcome to PrimeLand!</div>
+                        <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">Welcome!</div>
                         <span class="text-muted-color font-medium">Sign in to continue</span>
                     </div>
 
                     <div>
-                        <label for="email1" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Email</label>
-                        <InputText id="email1" type="text" placeholder="Email address" class="w-full md:w-[30rem] mb-8" v-model="email" />
+                        <Message severity="error" class="mb-8" v-if="isInvalidLogin">Invalid email address or password. Please try again.</Message>
 
-                        <label for="password1" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Password</label>
-                        <Password id="password1" v-model="password" placeholder="Password" :toggleMask="true" class="mb-4" fluid :feedback="false"></Password>
+                        <Form v-slot="$form" :initialValues="formFields" :resolver="formResolver" @submit="onLogIn">
 
-                        <div class="flex items-center justify-between mt-2 mb-8 gap-8">
-                            <div class="flex items-center">
-                                <Checkbox v-model="checked" id="rememberme1" binary class="mr-2"></Checkbox>
-                                <label for="rememberme1">Remember me</label>
+                            <FormField v-slot="$field" name="username">
+                                <label for="username" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Email</label>
+                                <InputText id="username" name="username" type="text" placeholder="Email address" class="w-full md:w-[30rem] mb-8" />
+                                <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">{{ $field.error?.message }}</Message>
+                            </FormField>
+
+                            <FormField v-slot="$field" name="password">
+                                <label for="password" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Password</label>
+                                <Password id="password" name="password" placeholder="Password" :toggleMask="true" class="mb-4" fluid :feedback="false"></Password>
+                                <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">{{ $field.error?.message }}</Message>
+                            </FormField>
+
+                            <div class="flex items-center justify-between mt-2 mb-8 gap-8">
+                                <div class="flex items-center">
+                                    <FormField v-slot="$field" name="remember">
+                                        <Checkbox name="remember" id="remember" binary class="mr-2"></Checkbox>
+                                        <label for="remember">Remember me</label>
+                                    </FormField>
+                                </div>
+                                <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">Forgot password?</span>
                             </div>
-                            <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">Forgot password?</span>
-                        </div>
-                        <Button label="Sign In" class="w-full" as="router-link" to="/"></Button>
+                            <Button type="submit" label="Sign In" class="w-full" :loading="isLoggingIn"></Button>
+                        </Form>
                     </div>
                 </div>
             </div>

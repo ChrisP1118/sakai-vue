@@ -16,7 +16,7 @@ onMounted(() => {
 });
 
 function loadItem() {
-    fetch('https://localhost:7067/api/v1/tenant/' + route.params.id, {
+    fetch(import.meta.env.VITE_API_BASE_URL + '/v1/tenant/' + route.params.id, {
         method: 'GET',
         headers: {
             'Authorization': 'Basic ' + btoa('cwilson:abcd1234')
@@ -38,7 +38,7 @@ function onFormSubmit(values) {
 
     isSaving.value = true;
 
-    fetch('https://localhost:7067/api/v1/tenant/' + route.params.id, {
+    fetch(import.meta.env.VITE_API_BASE_URL + '/v1/tenant/' + route.params.id, {
         method: 'PUT',
         body: JSON.stringify(item.value),
         headers: {

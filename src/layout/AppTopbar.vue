@@ -1,8 +1,32 @@
 <script setup>
+import { ref } from 'vue';
 import { useLayout } from '@/layout/composables/layout';
 import AppConfigurator from './AppConfigurator.vue';
+import Menu from 'primevue/menu';
+import { useRouter, useRoute } from 'vue-router'
+import { useAuthStore } from '@/stores/auth.js';
+
+const router = useRouter()
+const route = useRoute()
+const authStore = useAuthStore();
 
 const { toggleMenu, toggleDarkMode, isDarkTheme } = useLayout();
+
+const profileMenu = ref();
+const profileMenuItems = ref([
+    { 
+        label: 'Log Out', 
+        icon: 'pi pi-sign-out',
+        command: () => {
+            authStore.logOut();
+            router.push({ path: '/auth/logIn' });
+        }
+    }
+]);
+
+const toggleProfileMenu = (e) => {
+    profileMenu.value.toggle(e);
+};
 </script>
 
 <template>
@@ -68,10 +92,21 @@ const { toggleMenu, toggleDarkMode, isDarkTheme } = useLayout();
                         <i class="pi pi-inbox"></i>
                         <span>Messages</span>
                     </button>
-                    <button type="button" class="layout-topbar-action">
+                    <button type="button" class="layout-topbar-action" @click="toggleProfileMenu" aria-haspopup="true" aria-controls="overlay_menu">
                         <i class="pi pi-user"></i>
                         <span>Profile</span>
                     </button>
+                    <Menu ref="profileMenu" id="overlay_menu" :model="profileMenuItems" :popup="true">
+                        <template #end>
+                            <button class="relative overflow-hidden w-full border-0 bg-transparent flex items-start p-2 pl-4 hover:bg-surface-100 dark:hover:bg-surface-800 rounded-none cursor-pointer transition-colors duration-200">
+                                <Avatar image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" class="mr-2" shape="circle" />
+                                <span class="inline-flex flex-col items-start">
+                                    <span class="font-bold">{{ authStore.username }}</span>
+                                    <span class="text-sm">Admin</span>
+                                </span>
+                            </button>
+                        </template>                        
+                    </Menu>
                 </div>
             </div>
         </div>

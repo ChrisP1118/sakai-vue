@@ -26,7 +26,7 @@ function onFormSubmit(values) {
 
     isSaving.value = true;
 
-    fetch('https://localhost:7067/api/v1/tenant', {
+    fetch(import.meta.env.VITE_API_BASE_URL + '/v1/tenant', {
         method: 'POST',
         body: JSON.stringify(item.value),
         headers: {

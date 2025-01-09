@@ -2,9 +2,11 @@
 import { FilterMatchMode } from '@primevue/core';
 import { onMounted, ref, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router'
+import { useAuthStore } from '@/stores/auth.js';
 
 const router = useRouter()
 const route = useRoute()
+const authStore = useAuthStore();
 
 const dt = ref();
 const tableData = ref({
@@ -88,7 +90,7 @@ const loadQuery = (event, appendResults) => {
   if (!appendResults)
     tableData.value.continuationToken = null;
 
-  let url = 'https://localhost:7067/api/v1/tenant/query';
+  let url = import.meta.env.VITE_API_BASE_URL + '/v1/tenant/query';
 
   fetch(url, {
     method: 'POST',
@@ -99,7 +101,8 @@ const loadQuery = (event, appendResults) => {
         pageSize: tableData.value.rows
     }),
     headers: {
-        'Authorization': 'Basic ' + btoa('cwilson:abcd1234'),
+        //'Authorization': 'Basic ' + btoa('cwilson:abcd1234'),
+        'Authorization': 'Bearer ' + authStore.token,
         'Content-Type': 'application/json'
     }
   })
@@ -146,7 +149,7 @@ function onRowClick(event) {
                 :rows="tableData.rows"
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink CurrentPageReport RowsPerPageDropdown"
                 :pageLinkSize="(tableData.first / tableData.rows) + 2"
-                :rowsPerPageOptions="[1, 2, 3, 5]"
+                :rowsPerPageOptions="[1, 2, 3, 5, 10, 25, 50, 100]"
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
                 :totalRecords="tableData.totalRecords"
                 :loading="tableData.loading"
