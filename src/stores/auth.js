@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia'
+import { defineStore, acceptHMRUpdate } from 'pinia'
 
 export const useAuthStore = defineStore('auth', {
   state: () => {
@@ -9,8 +9,6 @@ export const useAuthStore = defineStore('auth', {
   },
   actions: {
     logIn(username, token) {
-        console.log(username);
-        console.log(token);
         this.username = username
         this.token = token
     },
@@ -20,8 +18,5 @@ export const useAuthStore = defineStore('auth', {
     }
   },
   getters: {
-    // username() {
-    //     return this.username;
-    // }
   }
 })

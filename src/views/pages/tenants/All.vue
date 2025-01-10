@@ -15,8 +15,8 @@ const tableData = ref({
     loading: false,
     totalRecords: 0,
     first: 0,
-    rows: 3,
-    continuationToken: null,
+    rows: 5,
+    continuationToken: null
 });
 const items = ref([
     {
@@ -43,7 +43,7 @@ const items = ref([
 const pagedItems = computed(() => {
     if (!items.value)
         return null;
-    
+
     return items.value.slice(tableData.value.first, tableData.value.first + tableData.value.rows);
 });
 

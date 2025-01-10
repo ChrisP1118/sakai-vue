@@ -12,9 +12,9 @@ import '@/assets/styles.scss';
 import '@/assets/tailwind.css';
 
 const pinia = createPinia();
-export const app = createApp(App);
+const app = createApp(App);
 
-app.use(pinia);
+app.use(createPinia());
 app.use(router);
 app.use(PrimeVue, {
     theme: {
