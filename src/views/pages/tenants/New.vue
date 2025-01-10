@@ -3,45 +3,29 @@ import { onMounted, ref, computed } from 'vue';
 import { useToast } from 'primevue/usetoast';
 import Fields from './Fields.vue';
 import { useRouter, useRoute } from 'vue-router'
+import { useFetchApi } from '@/utilities/ApiFetch.js';
 
 const router = useRouter()
 const route = useRoute()
-
 const toast = useToast();
+const { isFetching, fetchPost } = useFetchApi();
 
 const item = ref({
     name: 'New Tenant'
 });
-const isSaving = ref(false);
 
 onMounted(() => {
 });
 
 function onFormSubmit(values) {
-    console.log('Fields form submit');
-    console.log(item.value);
-    console.log(values);
-
     Object.assign(item.value, values);
 
-    isSaving.value = true;
-
-    fetch(import.meta.env.VITE_API_BASE_URL + '/v1/tenant', {
-        method: 'POST',
-        body: JSON.stringify(item.value),
-        headers: {
-            'Authorization': 'Basic ' + btoa('cwilson:abcd1234'),
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response =>  response.json().then(data => ({status: response.status, body: data})))
+    fetchPost('/v1/tenant', item.value)
     .then(response => 
     {
         console.log(response);
         if (response.status >= 200 && response.status < 300) {
             item.value = response.body;
-
-            isSaving.value = false;
 
             toast.add({
                 severity: 'success',
@@ -64,6 +48,6 @@ function onFormSubmit(values) {
 
 <template>
     <Fluid>
-        <Fields :item="item" :isSaving="isSaving" @form-submit="onFormSubmit"></Fields>
+        <Fields :item="item" :isSaving="isFetching" @form-submit="onFormSubmit"></Fields>
     </Fluid>
 </template>

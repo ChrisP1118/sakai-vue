@@ -3,10 +3,12 @@ import { FilterMatchMode } from '@primevue/core';
 import { onMounted, ref, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth.js';
+import { useFetchApi } from '@/utilities/ApiFetch.js';
 
 const router = useRouter()
 const route = useRoute()
 const authStore = useAuthStore();
+const { isFetching, fetchPost } = useFetchApi();
 
 const dt = ref();
 const tableData = ref({
@@ -39,6 +41,9 @@ const items = ref([
     },
 ])
 const pagedItems = computed(() => {
+    if (!items.value)
+        return null;
+    
     return items.value.slice(tableData.value.first, tableData.value.first + tableData.value.rows);
 });
 
@@ -48,7 +53,6 @@ const filters = ref({
 });
 
 onMounted(() => {
-    console.log('Mounted');
     tableData.value.loading = true;
 
     loadQuery({
@@ -58,8 +62,6 @@ onMounted(() => {
 });
 
 function onPage(event) {
-    console.log('Page');
-    console.log(event);
     if (event.first >= items.value.length) {
         loadQuery(event, true);
     } else if (event.rows != tableData.value.rows) {
@@ -72,7 +74,6 @@ function onPage(event) {
 }
 
 function onSort(event) {
-    console.log('Sort');
     loadQuery(event);
 }
 
@@ -82,49 +83,32 @@ function onFilter(event) {
 }
 
 const loadQuery = (event, appendResults) => {
-  console.log('Load lazy');
-  console.log(event);
-
   tableData.value.loading = true;
 
   if (!appendResults)
     tableData.value.continuationToken = null;
 
-  let url = import.meta.env.VITE_API_BASE_URL + '/v1/tenant/query';
-
-  fetch(url, {
-    method: 'POST',
-    body: JSON.stringify({
-        continuationToken: tableData.value.continuationToken,
-        sortField: event.sortField,
-        sortOrder: event.sortOrder,
-        pageSize: tableData.value.rows
-    }),
-    headers: {
-        //'Authorization': 'Basic ' + btoa('cwilson:abcd1234'),
-        'Authorization': 'Bearer ' + authStore.token,
-        'Content-Type': 'application/json'
-    }
+  fetchPost('/v1/tenant/query', {
+    continuationToken: tableData.value.continuationToken,
+    sortField: event.sortField,
+    sortOrder: event.sortOrder,
+    pageSize: tableData.value.rows
   })
-  .then(response => response.json()).then(response => {
-    console.log(response);
+  .then(response => {
     if (appendResults) {
-        items.value = items.value.concat(response.items);
+        items.value = items.value.concat(response.body.items);
         tableData.value.first += tableData.value.rows;
     } else {
-        items.value = response.items;
+        items.value = response.body.items;
         tableData.value.first = 0;
-        tableData.value.totalRecords = response.totalResults;
+        tableData.value.totalRecords = response.body.totalResults;
     }
-    tableData.value.continuationToken = response.continuationToken;
+    tableData.value.continuationToken = response.body.continuationToken;
     tableData.value.loading = false;
   });
 };
 
 function onRowClick(event) {
-    console.log('Row click');
-    console.log(event);
-
     var item = pagedItems.value[event.index];
     router.push({ path: '/tenants/' + item.id });
 }
