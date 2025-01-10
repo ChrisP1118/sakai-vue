@@ -12,7 +12,7 @@ import '@/assets/styles.scss';
 import '@/assets/tailwind.css';
 
 const pinia = createPinia();
-const app = createApp(App);
+export const app = createApp(App);
 
 app.use(pinia);
 app.use(router);

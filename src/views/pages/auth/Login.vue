@@ -64,8 +64,6 @@ const onLogIn = (e) => {
         if (response.status == 200 && response.body.token) {
             authStore.logIn(e.values.username, response.body.token);
 
-            isTokenExpired(response.body.token);
-
             router.push({ path: '/' });
         } else if (response.status == 403) {
             isInvalidLogin.value = true;
@@ -77,26 +75,7 @@ const onLogIn = (e) => {
     });
 }
 
-function isTokenExpired(token) {
-  const base64Url = token.split(".")[1];
-  const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-  const jsonPayload = decodeURIComponent(
-    atob(base64)
-      .split("")
-      .map(function (c) {
-        return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-      })
-      .join("")
-  );
 
-  const { exp } = JSON.parse(jsonPayload);
-
-  console.log(Date.now());
-  console.log(exp * 1000);
-
-  //const expired = Date.now() >= exp * 1000
-  //return expired
-}
 </script>
 
 <template>
