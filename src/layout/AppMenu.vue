@@ -17,7 +17,7 @@ const model = ref([
     {
         label: 'Admin',
         items: [
-            { label: 'Users', icon: 'pi pi-fw pi-user', to: '/users/list' },
+            { label: 'Users', icon: 'pi pi-fw pi-user', to: '/users/all' },
         ]
     },
     {

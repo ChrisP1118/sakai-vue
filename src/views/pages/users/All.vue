@@ -6,13 +6,13 @@ import * as tableUtilities from '@/utilities/TableUtilities.js';
 
 const router = useRouter()
 const route = useRoute()
-const tableUtils = tableUtilities.useTableUtilities('/v1/tenant/query');
+const tableUtils = tableUtilities.useTableUtilities('/v1/user/query');
 
 const dt = ref();
 
 const filters = ref({
     id: { value: null, matchMode: FilterMatchMode.EQUALS },
-    name: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    username: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
 });
 
 onMounted(() => {
@@ -21,7 +21,7 @@ onMounted(() => {
 
 function onRowClick(event) {
     var item = tableUtils.pagedItems.value[event.index];
-    router.push({ path: '/tenants/' + item.id });
+    router.push({ path: '/users/' + item.id });
 }
 
 </script>
@@ -45,7 +45,7 @@ function onRowClick(event) {
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink CurrentPageReport RowsPerPageDropdown"
                 :pageLinkSize="(tableUtils.tableData.value.first / tableUtils.tableData.value.rows) + 2"
                 :rowsPerPageOptions="[1, 2, 3, 5, 10, 25, 50, 100]"
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} tenants"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} users"
                 :totalRecords="tableUtils.tableData.value.totalRecords"
                 :loading="tableUtils.tableData.value.loading"
                 filterDisplay="row"
@@ -60,18 +60,17 @@ function onRowClick(event) {
                             <InputText placeholder="Search..." />
                         </IconField>
 
-                        <Button label="New Tenant" icon="pi pi-plus-circle" severity="secondary" as="router-link" to="/tenants/new" />
+                        <Button label="New User" icon="pi pi-plus-circle" severity="secondary" as="router-link" to="/users/new" />
                     </div>
                 </template>
 
                 <Column selectionMode="multiple" style="width: 3rem" :exportable="false"></Column>
                 <Column field="id" header="ID" sortable style="min-width: 6rem"></Column>
-                <Column field="name" header="Name" sortable>
+                <Column field="username" header="Username" sortable>
                     <template #filter="{ filterModel, filterCallback }">
-                        <InputText v-model="filterModel.value" type="text" @input="filterCallback()" placeholder="Search by name" />
+                        <InputText v-model="filterModel.value" type="text" @input="filterCallback()" placeholder="Search by username" />
                     </template>
                 </Column>
-                <Column field="isActive" header="Active" sortable></Column>
             </DataTable>
         </div>
 

@@ -41,8 +41,6 @@ const onLogIn = (e) => {
     if (!e.valid)
         return;
 
-    console.log('Logging in...');
-
     isLoggingIn.value = true;
     isInvalidLogin.value = false;
 
@@ -58,8 +56,6 @@ const onLogIn = (e) => {
     })
     .then(response =>  response.json().then(data => ({status: response.status, body: data})))
     .then(response => {
-
-        console.log(response);
 
         if (response.status == 200 && response.body.token) {
             authStore.logIn(e.values.username, response.body.token);
