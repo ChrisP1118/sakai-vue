@@ -97,6 +97,11 @@ const toggleProfileMenu = (e) => {
                         <span>Profile</span>
                     </button>
                     <Menu ref="profileMenu" id="overlay_menu" :model="profileMenuItems" :popup="true">
+                        <template #start>
+                            <span class="inline-flex items-center gap-1 px-2 py-2">
+                                <span class="text-xl font-semibold">{{ authStore.currentTenant }}</span>
+                            </span>
+                        </template>
                         <template #end>
                             <button class="relative overflow-hidden w-full border-0 bg-transparent flex items-start p-2 pl-4 hover:bg-surface-100 dark:hover:bg-surface-800 rounded-none cursor-pointer transition-colors duration-200">
                                 <Avatar image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" class="mr-2" shape="circle" />

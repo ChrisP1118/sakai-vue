@@ -58,7 +58,7 @@ const onLogIn = (e) => {
     .then(response => {
 
         if (response.status == 200 && response.body.token) {
-            authStore.logIn(e.values.username, response.body.token);
+            authStore.logIn(e.values.username, response.body.token, response.body.userSettings);
 
             router.push({ path: '/' });
         } else if (response.status == 403) {
