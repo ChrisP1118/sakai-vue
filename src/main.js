@@ -8,6 +8,8 @@ import PrimeVue from 'primevue/config';
 import ConfirmationService from 'primevue/confirmationservice';
 import ToastService from 'primevue/toastservice';
 
+import { useAuthStore } from '@/stores/auth.js';
+
 import '@/assets/styles.scss';
 import '@/assets/tailwind.css';
 
@@ -26,5 +28,13 @@ app.use(PrimeVue, {
 });
 app.use(ToastService);
 app.use(ConfirmationService);
+
+const authStore = useAuthStore();
+
+router.beforeEach(async (to, from) => {
+    if (!authStore.isLoggedIn && !to.fullPath.startsWith('/auth')) {
+        return { name: 'login' }
+    }
+});
 
 app.mount('#app');
