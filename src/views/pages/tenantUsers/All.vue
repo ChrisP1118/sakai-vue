@@ -1,8 +1,8 @@
-<script setup>
+<script setup lang="ts">
 import { FilterMatchMode } from '@primevue/core';
 import { onMounted, ref, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router'
-import * as tableUtilities from '@/utilities/TableUtilities.js';
+import * as tableUtilities from '@/utilities/TableUtilities';
 import { useAuthStore } from '@/stores/auth.js';
 
 const router = useRouter()
@@ -52,6 +52,7 @@ function onRowClick(event) {
                 :loading="tableUtils.tableData.value.loading"
                 filterDisplay="row"
                 @row-click="onRowClick"
+                resizableColumns columnResizeMode="fit" showGridlines :reorderableColumns="true" 
             >
                 <template #header>
                     <div class="flex flex-wrap gap-2 items-center justify-between">
@@ -66,13 +67,22 @@ function onRowClick(event) {
                     </div>
                 </template>
 
-                <Column selectionMode="multiple" style="width: 3rem" :exportable="false"></Column>
-                <Column field="id" header="ID" sortable style="min-width: 6rem"></Column>
+                <!-- <Column selectionMode="multiple" style="width: 3rem" :exportable="false"></Column> -->
+                <!-- <Column field="id" header="ID" sortable style="min-width: 6rem"></Column> -->
                 <Column field="username" header="Username" sortable>
                     <template #filter="{ filterModel, filterCallback }">
                         <InputText v-model="filterModel.value" type="text" @input="filterCallback()" placeholder="Search by username" />
                     </template>
+                    <template #body="{ data }">
+                        <div class="flex items-center gap-2">
+                            <Avatar :label="data.avatarLabel" class="mr-2" :style="'background-color: ' + data.avatarBackgroundColor" shape="circle" />
+                            <span>{{ data.username }}</span>
+                        </div>
+                    </template>
                 </Column>
+                <Column field="emailAddress" header="Email" sortable></Column>
+                <Column field="firstName" header="First Name" sortable></Column>
+                <Column field="lastName" header="Last Name" sortable></Column>
             </DataTable>
         </div>
 

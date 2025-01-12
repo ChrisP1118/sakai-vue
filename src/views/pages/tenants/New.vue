@@ -3,7 +3,7 @@ import { onMounted, ref, computed } from 'vue';
 import { useToast } from 'primevue/usetoast';
 import Fields from './Fields.vue';
 import { useRouter, useRoute } from 'vue-router'
-import { useFetchApi } from '@/utilities/ApiFetch.js';
+import { useFetchApi } from '@/utilities/ApiFetch';
 
 const router = useRouter()
 const route = useRoute()

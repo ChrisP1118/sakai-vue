@@ -1,6 +1,6 @@
 import { ref, computed } from "vue";
 import { useAuthStore } from '@/stores/auth.js';
-import { useFetchApi } from '@/utilities/ApiFetch.js';
+import { useFetchApi } from '@/utilities/ApiFetch';
 
 const { isFetching, fetchPost } = useFetchApi();
 const authStore = useAuthStore();
@@ -54,7 +54,7 @@ export function useTableUtilities(baseUrl) {
         loadQuery({
             first: tableData.value.first,
             rows: tableData.value.rows
-        });
+        }, false);
     };
     
     const onPage = (event) => {
@@ -70,12 +70,12 @@ export function useTableUtilities(baseUrl) {
     };
     
     const onSort = (event) => {
-        loadQuery(event);
+        loadQuery(event, false);
     }
     
     const onFilter = (event) => {
         console.log('Filter');
-        loadQuery(event);
+        loadQuery(event, false);
     }
 
      return {

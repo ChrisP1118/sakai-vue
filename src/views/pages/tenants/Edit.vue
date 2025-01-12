@@ -2,7 +2,7 @@
 import { onMounted, ref, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router'
 import { useToast } from 'primevue/usetoast';
-import { useFetchApi } from '@/utilities/ApiFetch.js';
+import { useFetchApi } from '@/utilities/ApiFetch';
 import Fields from './Fields.vue';
 
 const router = useRouter()

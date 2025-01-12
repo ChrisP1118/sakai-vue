@@ -2,7 +2,7 @@
 import { FilterMatchMode } from '@primevue/core';
 import { onMounted, ref, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router'
-import * as tableUtilities from '@/utilities/TableUtilities.js';
+import * as tableUtilities from '@/utilities/TableUtilities';
 
 const router = useRouter()
 const route = useRoute()
@@ -50,6 +50,7 @@ function onRowClick(event) {
                 :loading="tableUtils.tableData.value.loading"
                 filterDisplay="row"
                 @row-click="onRowClick"
+                resizableColumns columnResizeMode="fit" showGridlines :reorderableColumns="true" 
             >
                 <template #header>
                     <div class="flex flex-wrap gap-2 items-center justify-between">
@@ -64,7 +65,7 @@ function onRowClick(event) {
                     </div>
                 </template>
 
-                <Column selectionMode="multiple" style="width: 3rem" :exportable="false"></Column>
+                <!-- <Column selectionMode="multiple" style="width: 3rem" :exportable="false"></Column> -->
                 <Column field="id" header="ID" sortable style="min-width: 6rem"></Column>
                 <Column field="name" header="Name" sortable>
                     <template #filter="{ filterModel, filterCallback }">
