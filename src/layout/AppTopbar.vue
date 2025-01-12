@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useLayout } from '@/layout/composables/layout';
 import AppConfigurator from './AppConfigurator.vue';
 import Menu from 'primevue/menu';
@@ -13,20 +13,59 @@ const authStore = useAuthStore();
 const { toggleMenu, toggleDarkMode, isDarkTheme } = useLayout();
 
 const profileMenu = ref();
-const profileMenuItems = ref([
-    { 
-        label: 'Log Out', 
-        icon: 'pi pi-sign-out',
-        command: () => {
-            authStore.logOut();
-            router.push({ path: '/auth/logIn' });
-        }
-    }
-]);
 
 const toggleProfileMenu = (e) => {
     profileMenu.value.toggle(e);
 };
+
+const profileMenuItems = computed(() => {
+    let menuItems = [];
+    let tenantItems = [];
+
+    if (authStore.userSettings) {
+        authStore.userSettings.tenants.forEach(tenant => {
+            tenantItems.push({
+                label: tenant.name,
+                icon: 'pi pi-fw ' + (tenant.id == authStore.currentTenantId ? 'pi-check-circle' : 'pi-circle'),
+                command: () => {
+                    authStore.setCurrentTenant(tenant.id);
+                    router.push({ path: '/' });
+                }
+            });
+        });
+
+        menuItems.push({
+            label: 'Tenants',
+            items: tenantItems
+        });
+    }
+
+    if (authStore.username) {
+        menuItems.push({
+            label: 'Account',
+            items: [
+                { 
+                    label: 'Log Out', 
+                    icon: 'pi pi-sign-out',
+                    command: () => {
+                        authStore.logOut();
+                        router.push({ path: '/auth/logIn' });
+                    }
+                }
+            ]
+        });
+    } else {
+        menuItems.push({
+            label: 'Log In',
+            icon: 'pi pi-sign-in',
+            command: () => {
+                router.push({ path: '/auth/logIn' });
+            }
+        });
+    }
+
+    return menuItems;
+})
 </script>
 
 <template>
@@ -54,7 +93,7 @@ const toggleProfileMenu = (e) => {
                     </g>
                 </svg>
 
-                <span>Framework</span>
+                <span>{{ authStore.currentTenant }}</span>
             </router-link>
         </div>
 
@@ -97,17 +136,17 @@ const toggleProfileMenu = (e) => {
                         <span>Profile</span>
                     </button>
                     <Menu ref="profileMenu" id="overlay_menu" :model="profileMenuItems" :popup="true">
-                        <template #start>
+                        <template #start v-if="authStore.isLoggedIn">
                             <span class="inline-flex items-center gap-1 px-2 py-2">
                                 <span class="text-xl font-semibold">{{ authStore.currentTenant }}</span>
                             </span>
                         </template>
-                        <template #end>
+                        <template #end v-if="authStore.isLoggedIn">
                             <button class="relative overflow-hidden w-full border-0 bg-transparent flex items-start p-2 pl-4 hover:bg-surface-100 dark:hover:bg-surface-800 rounded-none cursor-pointer transition-colors duration-200">
                                 <Avatar image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" class="mr-2" shape="circle" />
                                 <span class="inline-flex flex-col items-start">
                                     <span class="font-bold">{{ authStore.username }}</span>
-                                    <span class="text-sm">Admin</span>
+                                    <!-- <span class="text-sm">Admin</span> -->
                                 </span>
                             </button>
                         </template>                        

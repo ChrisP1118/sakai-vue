@@ -5,7 +5,7 @@ import { useFetchApi } from '@/utilities/ApiFetch.js';
 const { isFetching, fetchPost } = useFetchApi();
 const authStore = useAuthStore();
 
-export function useTableUtilities(queryUrl) {
+export function useTableUtilities(baseUrl) {
      const tableData = ref({
          loading: false,
          totalRecords: 0,
@@ -20,6 +20,7 @@ export function useTableUtilities(queryUrl) {
      
          return items.value.slice(tableData.value.first, tableData.value.first + tableData.value.rows);
      }); 
+     const queryUrl = baseUrl;
 
      const loadQuery = (event, appendResults) => {
         tableData.value.loading = true;
@@ -81,6 +82,7 @@ export function useTableUtilities(queryUrl) {
           tableData,
           items,
           pagedItems,
+          queryUrl,
           loadQuery,
           onMounted,
           onPage,

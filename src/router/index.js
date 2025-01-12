@@ -19,6 +19,11 @@ const router = createRouter({
                     component: () => import('@/views/tasks/All.vue')
                 },
                 {
+                    path: '/tenantUsers/all',
+                    name: 'allTenantUsers',
+                    component: () => import('@/views/pages/tenantUsers/All.vue')
+                },
+                {
                     path: '/users/all',
                     name: 'allUsers',
                     component: () => import('@/views/pages/users/All.vue')

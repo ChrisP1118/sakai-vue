@@ -14,7 +14,7 @@ const authStore = useAuthStore();
 const formFields = ref({
     username: 'cwilson',
     password: 'abcd1234',
-    remember: false
+    remember: true
 })
 const isLoggingIn = ref(false);
 const isInvalidLogin = ref(false);
@@ -58,7 +58,7 @@ const onLogIn = (e) => {
     .then(response => {
 
         if (response.status == 200 && response.body.token) {
-            authStore.logIn(e.values.username, response.body.token, response.body.userSettings);
+            authStore.logIn(e.values.username, response.body.token, response.body.userSettings, e.values.remember);
 
             router.push({ path: '/' });
         } else if (response.status == 403) {
