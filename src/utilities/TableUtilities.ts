@@ -1,6 +1,7 @@
 import { ref, computed } from "vue";
 import { useAuthStore } from '@/stores/auth.js';
 import { useFetchApi } from '@/utilities/ApiFetch';
+import debounce from "./Debounce";
 
 const { isFetching, fetchPost } = useFetchApi();
 const authStore = useAuthStore();
@@ -23,16 +24,26 @@ export function useTableUtilities(baseUrl) {
      const queryUrl = baseUrl;
 
      const loadQuery = (event, appendResults) => {
+        console.log('Load Query');
+        console.log(event);
+
         tableData.value.loading = true;
       
         if (!appendResults)
           tableData.value.continuationToken = null;
-      
+        
+        let filters = [];
+
+        for (const prop in event.filters)
+            if (event.filters[prop].value)
+                filters.push( { field: prop, value: event.filters[prop].value } );
+
         fetchPost(queryUrl, {
           continuationToken: tableData.value.continuationToken,
           sortField: event.sortField,
           sortOrder: event.sortOrder,
-          pageSize: tableData.value.rows
+          pageSize: tableData.value.rows,
+          filters: filters
         })
         .then(response => {
           if (appendResults) {
@@ -73,12 +84,17 @@ export function useTableUtilities(baseUrl) {
         loadQuery(event, false);
     }
     
-    const onFilter = (event) => {
+    // const onFilter = (event) => {
+    //     console.log('Filter');
+    //     loadQuery(event, false);
+    // }
+
+    const onFilter = debounce((event) => {
         console.log('Filter');
         loadQuery(event, false);
-    }
+    }, 300);
 
-     return {
+    return {
           tableData,
           items,
           pagedItems,

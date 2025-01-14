@@ -11,8 +11,10 @@ const tableUtils = tableUtilities.useTableUtilities('/v1/user/query');
 const dt = ref();
 
 const filters = ref({
-    id: { value: null, matchMode: FilterMatchMode.EQUALS },
     username: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    firstName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    lastName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    emailAddress: { value: null, matchMode: FilterMatchMode.STARTS_WITH }
 });
 
 onMounted(() => {
@@ -67,7 +69,8 @@ function onRowClick(event) {
 
                 <!-- <Column selectionMode="multiple" style="width: 3rem" :exportable="false"></Column> -->
                 <!-- <Column field="id" header="ID" sortable style="min-width: 6rem"></Column> -->
-                <Column field="username" header="Username" sortable>
+                <!-- <Column field="username" :header="'Username' + (filters.username.value ? ': ' + filters.username.value : '')" sortable :showFilterMatchModes="false"> -->
+                <Column field="username" header="Username" sortable :showFilterMatchModes="false">
                     <template #filter="{ filterModel, filterCallback }">
                         <InputText v-model="filterModel.value" type="text" @input="filterCallback()" placeholder="Search by username" />
                     </template>
@@ -78,7 +81,11 @@ function onRowClick(event) {
                         </div>
                     </template>
                 </Column>
-                <Column field="emailAddress" header="Email" sortable></Column>
+                <Column field="emailAddress" header="Email" sortable>
+                    <template #filter="{ filterModel, filterCallback }">
+                        <InputText v-model="filterModel.value" type="text" @input="filterCallback()" placeholder="Search by email" />
+                    </template>
+                </Column>
                 <Column field="firstName" header="First Name" sortable></Column>
                 <Column field="lastName" header="Last Name" sortable></Column>
             </DataTable>
