@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { FilterMatchMode } from '@primevue/core';
-import { onMounted, ref, computed } from 'vue';
+import { onMounted, ref, computed, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router'
 import * as tableUtilities from '@/utilities/TableUtilities';
 import { useAuthStore } from '@/stores/auth.js';
@@ -9,7 +9,8 @@ const router = useRouter()
 const route = useRoute()
 const authStore = useAuthStore();
 const dt = ref();
-const tableUtils = tableUtilities.useTableUtilities('/v1/tenant/' + authStore.currentTenantId + '/user/query');
+const tenantId = ref(route.params.tenantId);
+const tableUtils = tableUtilities.useTableUtilities();
 
 const filters = ref({
     id: { value: null, matchMode: FilterMatchMode.EQUALS },
@@ -17,14 +18,21 @@ const filters = ref({
 });
 
 onMounted(() => {
-    tableUtils.queryUrl = '/v1/tenant/' + authStore.currentTenantId + '/user/query';
-    tableUtils.onMounted();
+    tableUtils.init('/v1/tenant/' + tenantId.value + '/user/query');
 });
 
 function onRowClick(event) {
     var item = tableUtils.pagedItems.value[event.index];
-    router.push({ path: '/users/' + item.id });
+    router.push({ path: '/tenants/' + tenantId.value + '/users/' + item.id });
 }
+
+watch(
+  () => route.params.tenantId,
+  (newValue) => {
+    tenantId.value = route.params.tenantId;
+    tableUtils.init('/v1/tenant/' + tenantId.value + '/user/query');
+  }
+);
 
 </script>
 
@@ -46,7 +54,7 @@ function onRowClick(event) {
                 :rows="tableUtils.tableData.value.rows"
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink CurrentPageReport RowsPerPageDropdown"
                 :pageLinkSize="(tableUtils.tableData.value.first / tableUtils.tableData.value.rows) + 2"
-                :rowsPerPageOptions="[1, 2, 3, 5, 10, 25, 50, 100]"
+                :rowsPerPageOptions="[5, 10, 25, 50, 100]"
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} users"
                 :totalRecords="tableUtils.tableData.value.totalRecords"
                 :loading="tableUtils.tableData.value.loading"

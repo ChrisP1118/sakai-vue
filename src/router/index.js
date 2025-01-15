@@ -19,17 +19,27 @@ const router = createRouter({
                     component: () => import('@/views/tasks/All.vue')
                 },
                 {
-                    path: '/tenantUsers/all',
+                    path: '/tenants/:tenantId/users',
                     name: 'allTenantUsers',
                     component: () => import('@/views/pages/tenantUsers/All.vue')
                 },
                 {
-                    path: '/users/all',
+                    path: '/tenants/:tenantId/users/:id',
+                    name: 'editTenantUser',
+                    component: () => import('@/views/pages/tenantUsers/Edit.vue')
+                },
+                {
+                    path: '/users',
                     name: 'allUsers',
                     component: () => import('@/views/pages/users/All.vue')
                 },
                 {
-                    path: '/tenants/all',
+                    path: '/users/:id',
+                    name: 'editUser',
+                    component: () => import('@/views/pages/users/Edit.vue')
+                },
+                {
+                    path: '/tenants',
                     name: 'allTenants',
                     component: () => import('@/views/pages/tenants/All.vue')
                 },

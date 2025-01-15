@@ -6,7 +6,7 @@ import * as tableUtilities from '@/utilities/TableUtilities';
 
 const router = useRouter()
 const route = useRoute()
-const tableUtils = tableUtilities.useTableUtilities('/v1/tenant/query');
+const tableUtils = tableUtilities.useTableUtilities();
 
 const dt = ref();
 
@@ -16,7 +16,7 @@ const filters = ref({
 });
 
 onMounted(() => {
-    tableUtils.onMounted();
+    tableUtils.init('/v1/tenant/query');
 });
 
 function onRowClick(event) {
@@ -44,7 +44,7 @@ function onRowClick(event) {
                 :rows="tableUtils.tableData.value.rows"
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink CurrentPageReport RowsPerPageDropdown"
                 :pageLinkSize="(tableUtils.tableData.value.first / tableUtils.tableData.value.rows) + 2"
-                :rowsPerPageOptions="[1, 2, 3, 5, 10, 25, 50, 100]"
+                :rowsPerPageOptions="[5, 10, 25, 50, 100]"
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} tenants"
                 :totalRecords="tableUtils.tableData.value.totalRecords"
                 :loading="tableUtils.tableData.value.loading"

@@ -6,12 +6,12 @@ import debounce from "./Debounce";
 const { isFetching, fetchPost } = useFetchApi();
 const authStore = useAuthStore();
 
-export function useTableUtilities(baseUrl) {
+export function useTableUtilities() {
      const tableData = ref({
          loading: false,
          totalRecords: 0,
          first: 0,
-         rows: 5,
+         rows: 25,
          continuationToken: null
      });
      const items = ref([]);
@@ -21,12 +21,9 @@ export function useTableUtilities(baseUrl) {
      
          return items.value.slice(tableData.value.first, tableData.value.first + tableData.value.rows);
      }); 
-     const queryUrl = baseUrl;
+     const queryUrl = ref();
 
      const loadQuery = (event, appendResults) => {
-        console.log('Load Query');
-        console.log(event);
-
         tableData.value.loading = true;
       
         if (!appendResults)
@@ -38,7 +35,7 @@ export function useTableUtilities(baseUrl) {
             if (event.filters[prop].value)
                 filters.push( { field: prop, value: event.filters[prop].value } );
 
-        fetchPost(queryUrl, {
+        fetchPost(queryUrl.value, {
           continuationToken: tableData.value.continuationToken,
           sortField: event.sortField,
           sortOrder: event.sortOrder,
@@ -59,7 +56,10 @@ export function useTableUtilities(baseUrl) {
         });
     };
 
-    const onMounted = () => {
+    const init = (newQueryUrl) => {
+        if (newQueryUrl)
+            queryUrl.value = newQueryUrl;
+        items.value = [];
         tableData.value.loading = true;
     
         loadQuery({
@@ -99,8 +99,8 @@ export function useTableUtilities(baseUrl) {
           items,
           pagedItems,
           queryUrl,
+          init,
           loadQuery,
-          onMounted,
           onPage,
           onSort,
           onFilter

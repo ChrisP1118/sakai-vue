@@ -1,7 +1,9 @@
 <script setup>
 import { ref } from 'vue';
-
+import { useAuthStore } from '@/stores/auth.js';
 import AppMenuItem from './AppMenuItem.vue';
+
+const authStore = useAuthStore();
 
 const model = ref([
     {
@@ -17,14 +19,14 @@ const model = ref([
     {
         label: 'Admin',
         items: [
-            { label: 'Users', icon: 'pi pi-fw pi-user', to: '/tenantUsers/all' },
+            { label: 'Users', icon: 'pi pi-fw pi-user', to: '/tenants/' + authStore.currentTenantId + '/users' },
         ]
     },
     {
         label: 'Global Admin',
         items: [
-            { label: 'Tenants', icon: 'pi pi-fw pi-globe', to: '/tenants/all' },
-            { label: 'Users', icon: 'pi pi-fw pi-user', to: '/users/all' },
+            { label: 'Tenants', icon: 'pi pi-fw pi-globe', to: '/tenants' },
+            { label: 'Users', icon: 'pi pi-fw pi-user', to: '/users' },
         ]
     },
     {

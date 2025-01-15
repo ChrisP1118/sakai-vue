@@ -30,9 +30,22 @@ const formResolver = ({ values }) => {
 </script>
 
 <template>
-    <div class="flex flex-col md:flex-row gap-8" v-if="item">
-        <div class="md:w-1/2">
-            <Form v-slot="$form" :initialValues="item" :resolver="formResolver" @submit="onFormSubmit">
+    <Form v-slot="$form" :initialValues="item" :resolver="formResolver" @submit="onFormSubmit">
+        <div class="grid grid-cols-2 m-0">
+            <div>
+                <h2 class="text-xl" v-if="item">
+                    <span>{{ item.name }}</span>
+                </h2>
+            </div>
+            <div class="text-right">
+                <Button type="submit" label="Save" :loading="isSaving" :fluid="false" />
+            </div>
+        </div>
+
+        <Divider />
+
+        <div class="flex flex-col md:flex-row gap-8" v-if="item">
+            <div class="md:w-1/2">
                 <div class="card flex flex-col gap-4">
                     <div class="font-semibold text-xl">Tenant</div>
                     <div class="flex flex-col gap-2">
@@ -53,11 +66,8 @@ const formResolver = ({ values }) => {
                         <label for="isActive">Active</label>
                         <ToggleSwitch id="isActive" v-model="item.isActive" />
                     </div> -->
-                    <div class="flex flex-col gap-2">
-                        <Button type="submit" label="Save" :loading="isSaving" />
-                    </div>
                 </div>
-            </Form>
+            </div>
         </div>
-    </div>
+    </Form>
 </template>
