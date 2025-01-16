@@ -28,8 +28,16 @@ const profileMenuItems = computed(() => {
                 label: tenant.name,
                 icon: 'pi pi-fw ' + (tenant.id == authStore.currentTenantId ? 'pi-check-circle' : 'pi-circle'),
                 command: () => {
-                    authStore.setCurrentTenant(tenant.id);
-                    router.push({ path: '/' });
+                    let oldTenantID = authStore.getCurrentTenantId();
+
+                    authStore.setCurrentTenantId(tenant.id);
+
+                    if (router.currentRoute.value.path.startsWith('/tenants/' + oldTenantID)) {
+                        let newPath = router.currentRoute.value.path.replace('/tenants/' + oldTenantID, '/tenants/' + tenant.id);
+                        router.push({ path: newPath });
+                    } else {
+                        router.push({ path: '/' });
+                    }
                 }
             });
         });
@@ -93,7 +101,7 @@ const profileMenuItems = computed(() => {
                     </g>
                 </svg>
 
-                <span>{{ authStore.currentTenant }}</span>
+                <span>{{ authStore.currentTenantName }}</span>
             </router-link>
         </div>
 
@@ -138,7 +146,7 @@ const profileMenuItems = computed(() => {
                     <Menu ref="profileMenu" id="overlay_menu" :model="profileMenuItems" :popup="true">
                         <template #start v-if="authStore.isLoggedIn">
                             <span class="inline-flex items-center gap-1 px-2 py-2">
-                                <span class="text-xl font-semibold">{{ authStore.currentTenant }}</span>
+                                <span class="text-xl font-semibold">{{ authStore.currentTenantName }}</span>
                             </span>
                         </template>
                         <template #end v-if="authStore.isLoggedIn">

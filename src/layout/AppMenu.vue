@@ -2,7 +2,10 @@
 import { ref } from 'vue';
 import { useAuthStore } from '@/stores/auth.js';
 import AppMenuItem from './AppMenuItem.vue';
+import { useRouter, useRoute } from 'vue-router'
 
+const router = useRouter()
+const route = useRoute()
 const authStore = useAuthStore();
 
 const model = ref([
@@ -19,7 +22,8 @@ const model = ref([
     {
         label: 'Admin',
         items: [
-            { label: 'Users', icon: 'pi pi-fw pi-user', to: '/tenants/' + authStore.currentTenantId + '/users' },
+            // We use a "command" here, instead of "to", because this value is set when the app loads, but the current tenant id could change later on
+            { label: 'Users', icon: 'pi pi-fw pi-user', command: () => { router.push({ path: '/tenants/' + authStore.currentTenantId + '/users' }); }},
         ]
     },
     {

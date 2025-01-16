@@ -35,6 +35,13 @@ router.beforeEach(async (to, from) => {
     if (!authStore.isLoggedIn && !to.fullPath.startsWith('/auth')) {
         return { name: 'login' }
     }
+
+    if (to.params && to.params.tenantId) {
+        if (to.params.tenantId != authStore.getCurrentTenantId()) {
+            console.log('Switching tenant!')
+            authStore.setCurrentTenantId(to.params.tenantId);
+        }
+    }
 });
 
 app.mount('#app');

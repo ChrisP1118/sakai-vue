@@ -4,12 +4,13 @@ import { useRouter, useRoute } from 'vue-router'
 import { useToast } from 'primevue/usetoast';
 import { useFetchApi } from '@/utilities/ApiFetch';
 import Fields from './Fields.vue';
+import { useAuthStore } from '@/stores/auth.js';
 
 const router = useRouter()
 const route = useRoute()
 const toast = useToast();
 const { isFetching, fetchGet, fetchPut } = useFetchApi();
-
+const authStore = useAuthStore();
 const item = ref();
 
 onMounted(() => {
@@ -51,6 +52,10 @@ function onFormSubmit(values) {
 
 <template>
     <Fluid>
-        <Fields :item="item" :isSaving="isFetching" @form-submit="onFormSubmit"></Fields>
+        <Fields :item="item" :isSaving="isFetching" @form-submit="onFormSubmit">
+            <template #buttons>
+                <Button type="button" severity="secondary" label="Use" @click="authStore.setCurrentTenantId(route.params.id)" />
+            </template>
+        </Fields>
     </Fluid>
 </template>

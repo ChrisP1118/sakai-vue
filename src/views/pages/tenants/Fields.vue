@@ -38,7 +38,10 @@ const formResolver = ({ values }) => {
                 </h2>
             </div>
             <div class="text-right">
-                <Button type="submit" label="Save" :loading="isSaving" :fluid="false" />
+                <ButtonGroup>
+                    <slot name="buttons" />
+                    <Button type="submit" label="Save" :loading="isSaving" :fluid="false" />
+                </ButtonGroup>
             </div>
         </div>
 
