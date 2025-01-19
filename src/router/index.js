@@ -22,6 +22,14 @@ const router = createRouter({
                     }
                 },
                 {
+                    path: '/tenants/:tenantId/workItems/:id',
+                    name: 'editWorkItem',
+                    component: () => import('@/views/pages/workItems/Edit.vue'),
+                    meta: {
+                        appMenuItemName: 'workItems'
+                    }
+                },
+                {
                     path: '/tenants/:tenantId/users',
                     name: 'allTenantUsers',
                     component: () => import('@/views/pages/tenantUsers/All.vue'),
