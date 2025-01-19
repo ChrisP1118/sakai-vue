@@ -14,9 +14,9 @@ const router = createRouter({
                     component: () => import('@/views/Dashboard.vue')
                 },
                 {
-                    path: '/tasks/all',
-                    name: 'allTasks',
-                    component: () => import('@/views/tasks/All.vue')
+                    path: '/tenants/:tenantId/workItems',
+                    name: 'allWorkItems',
+                    component: () => import('@/views/pages/workItems/All.vue')
                 },
                 {
                     path: '/tenants/:tenantId/users',

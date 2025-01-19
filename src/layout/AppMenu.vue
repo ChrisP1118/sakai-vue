@@ -14,9 +14,10 @@ const model = ref([
         items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/' }]
     },
     {
-        label: 'Tasks',
+        label: 'Work Items',
         items: [
-            { label: 'All', icon: 'pi pi-fw pi-user', to: '/tasks/all' },
+            // We use a "command" here, instead of "to", because this value is set when the app loads, but the current tenant id could change later on
+            { label: 'Work Items', icon: 'pi pi-fw pi-list-check', command: () => { router.push({ path: '/tenants/' + authStore.currentTenantId + '/workItems' }); }},
         ]
     },
     {
