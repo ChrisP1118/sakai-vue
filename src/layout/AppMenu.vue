@@ -17,14 +17,14 @@ const model = ref([
         label: 'Work Items',
         items: [
             // We use a "command" here, instead of "to", because this value is set when the app loads, but the current tenant id could change later on
-            { label: 'Work Items', icon: 'pi pi-fw pi-list-check', command: () => { router.push({ path: '/tenants/' + authStore.currentTenantId + '/workItems' }); }},
+            { label: 'Work Items', icon: 'pi pi-fw pi-list-check', appMenuItemName: 'workItems', command: () => { router.push({ path: '/tenants/' + authStore.currentTenantId + '/workItems' }); }},
         ]
     },
     {
         label: 'Admin',
         items: [
             // We use a "command" here, instead of "to", because this value is set when the app loads, but the current tenant id could change later on
-            { label: 'Users', icon: 'pi pi-fw pi-user', command: () => { router.push({ path: '/tenants/' + authStore.currentTenantId + '/users' }); }},
+            { label: 'Users', icon: 'pi pi-fw pi-user', appMenuItemName: 'users', command: () => { router.push({ path: '/tenants/' + authStore.currentTenantId + '/users' }); }},
         ]
     },
     {

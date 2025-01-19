@@ -16,17 +16,26 @@ const router = createRouter({
                 {
                     path: '/tenants/:tenantId/workItems',
                     name: 'allWorkItems',
-                    component: () => import('@/views/pages/workItems/All.vue')
+                    component: () => import('@/views/pages/workItems/All.vue'),
+                    meta: {
+                        appMenuItemName: 'workItems'
+                    }
                 },
                 {
                     path: '/tenants/:tenantId/users',
                     name: 'allTenantUsers',
-                    component: () => import('@/views/pages/tenantUsers/All.vue')
+                    component: () => import('@/views/pages/tenantUsers/All.vue'),
+                    meta: {
+                        appMenuItemName: 'users'
+                    }
                 },
                 {
                     path: '/tenants/:tenantId/users/:id',
                     name: 'editTenantUser',
-                    component: () => import('@/views/pages/tenantUsers/Edit.vue')
+                    component: () => import('@/views/pages/tenantUsers/Edit.vue'),
+                    meta: {
+                        appMenuItemName: 'users'
+                    }
                 },
                 {
                     path: '/users',

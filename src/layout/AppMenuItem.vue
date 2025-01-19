@@ -44,6 +44,10 @@ watch(
     }
 );
 
+function checkIfActive(item) {
+    return item.to ? checkActiveRoute(item) : false;
+}
+
 function itemClick(event, item) {
     if (item.disabled) {
         event.preventDefault();
@@ -64,6 +68,8 @@ function itemClick(event, item) {
 }
 
 function checkActiveRoute(item) {
+    if (item.appMenuItemName && item.appMenuItemName == route.meta.appMenuItemName)
+        return true;
     return route.path === item.to;
 }
 </script>
@@ -71,7 +77,7 @@ function checkActiveRoute(item) {
 <template>
     <li :class="{ 'layout-root-menuitem': root, 'active-menuitem': isActiveMenu }">
         <div v-if="root && item.visible !== false" class="layout-menuitem-root-text">{{ item.label }}</div>
-        <a v-if="(!item.to || item.items) && item.visible !== false" :href="item.url" @click="itemClick($event, item, index)" :class="item.class" :target="item.target" tabindex="0">
+        <a v-if="(!item.to || item.items) && item.visible !== false" :href="item.url" @click="itemClick($event, item, index)" :class="(item.class ?? '') + (checkActiveRoute(item) ? ' active-route' : '')" :target="item.target" tabindex="0">
             <i :class="item.icon" class="layout-menuitem-icon"></i>
             <span class="layout-menuitem-text">{{ item.label }}</span>
             <i class="pi pi-fw pi-angle-down layout-submenu-toggler" v-if="item.items"></i>
