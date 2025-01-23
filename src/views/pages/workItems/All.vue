@@ -71,7 +71,7 @@ watch(
                             <InputText placeholder="Search..." />
                         </IconField>
 
-                        <Button label="New Work Item" icon="pi pi-plus-circle" severity="secondary" as="router-link" to="/workItems/new" />
+                        <Button label="New Work Item" icon="pi pi-plus-circle" severity="secondary" as="router-link" :to="'/tenants/' + tenantId + '/workItems/new'" />
                     </div>
                 </template>
 
