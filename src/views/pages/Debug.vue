@@ -2,7 +2,7 @@
 import { onMounted, ref, computed, watch, onUnmounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth.js';
-import { useTestHub } from '@/utilities/TestHub';
+import { useTestHub } from '@/utilities/Hubs';
 import { Form } from '@primevue/forms';
 
 const router = useRouter()
@@ -107,3 +107,4 @@ const sendAlertFormResolver = ({ values }) => {
         </Fluid>     
     </div>
 </template>
+@/utilities/Hubs

@@ -21,7 +21,7 @@ onMounted(() => {
 function onFormSubmit(values) {
     Object.assign(item.value, values);
 
-    fetchPost('/v1/tenant/' + route.params.tenantId + '/workItem', item.value)
+    fetchPost(`/v1/tenant/${tenantId.value}/workItem`, item.value)
     .then(response => 
     {
         console.log(response);
@@ -34,7 +34,7 @@ function onFormSubmit(values) {
                 life: 3000
             });
 
-            router.push({ path: '/tenants/' + item.value.id });
+            router.push({ path: `/tenants/${tenantId.value}/workItems/${item.value.id}` });
         } else {
             toast.add({
                 severity: 'error',

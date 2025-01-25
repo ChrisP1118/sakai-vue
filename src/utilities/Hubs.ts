@@ -2,14 +2,25 @@ import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { HubConnectionBuilder, HubConnectionState } from "@microsoft/signalr";
 import { useAuthStore } from '@/stores/auth.js';
 
-const connection = ref(null);
-const accessToken = ref(null);
+const testHubConnection = ref(null);
+const testHubAccessToken = ref(null);
 
 export function useTestHub() {
+    return useHub('TestHub', '/test', testHubConnection, testHubAccessToken);
+}
+
+const workItemHubConnection = ref(null);
+const workItemHubAccessToken = ref(null);
+
+export function useWorkItemHub() {
+    return useHub('WorkItemHub', '/workItem', workItemHubConnection, workItemHubAccessToken);
+}
+
+function useHub(name: string, path: string, connection, accessToken) {
 
     const restart = () => {
         if (connection.value && connection.value.state === HubConnectionState.Connected) {
-            console.log("Stopping TestHub connection");
+            console.log(`Stopping ${name} connection`);
             connection.value.stop();
         }
 
@@ -19,7 +30,7 @@ export function useTestHub() {
 
     const getNewConnection = () => {
         return new HubConnectionBuilder()
-            .withUrl(import.meta.env.VITE_HUB_BASE_URL + "/test", { accessTokenFactory: () => {
+            .withUrl(import.meta.env.VITE_HUB_BASE_URL + path, { accessTokenFactory: () => {
                 accessToken.value = authStore.token;
         
                 return accessToken.value;
@@ -30,9 +41,9 @@ export function useTestHub() {
 
     async function start() {
         try {
-            console.log("Starting TestHub connection");
+            console.log(`Starting ${name} connection`);
             await connection.value.start();
-            console.log("Started TestHub connection");
+            console.log(`Started ${name} connection`);
         } catch (err) {
             console.log(err);
             setTimeout(start, 5000);
