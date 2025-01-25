@@ -8,6 +8,8 @@
         "lint": "eslint --fix . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
     },
     "dependencies": {
+        "@dreamonkey/vue-signalr": "^1.2.0",
+        "@microsoft/signalr": "^8.0.7",
         "@primevue/forms": "^4.2.5",
         "@primevue/themes": "^4.2.4",
         "chart.js": "3.3.2",

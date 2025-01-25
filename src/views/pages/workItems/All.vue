@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { FilterMatchMode } from '@primevue/core';
-import { onMounted, ref, computed, watch } from 'vue';
+import { onMounted, ref, computed, watch, onUnmounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router'
 import * as tableUtilities from '@/utilities/TableUtilities';
 import { useAuthStore } from '@/stores/auth.js';
+import { useTestHub } from '@/utilities/TestHub';
 
 const router = useRouter()
 const route = useRoute()
@@ -11,14 +12,26 @@ const authStore = useAuthStore();
 const dt = ref();
 const tenantId = ref(route.params.tenantId);
 const tableUtils = tableUtilities.useTableUtilities();
+const testHub = useTestHub();
 
 const filters = ref({
     id: { value: null, matchMode: FilterMatchMode.EQUALS },
     name: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
 });
 
+const onAlert = (alert) => {
+    console.log('All OnAlert');
+    console.log(alert);
+};
+
 onMounted(() => {
     tableUtils.init('/v1/tenant/' + tenantId.value + '/workItem/query');
+
+    testHub.connection.value.on('OnAlert', onAlert);
+});
+
+onUnmounted(() => {
+    testHub.connection.value.off('OnAlert', onAlert);
 });
 
 function onRowClick(event) {
