@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, computed, onUnmounted } from 'vue';
+import { onMounted, ref, computed, onUnmounted, watch } from 'vue';
 import { useAuthStore } from '@/stores/auth.js';
 import { useTestHub } from '@/utilities/TestHub';
 import { useToast } from 'primevue/usetoast';
@@ -9,19 +9,32 @@ const authStore = useAuthStore();
 const testHub = useTestHub();
 
 const onAlert = (alert) => {
-    console.log('App OnAlert');
-    console.log(alert);
     toast.add({ severity: alert.severity, summary: alert.title, detail: alert.message, life: 3000 });
 };
 
 onMounted(() => {
     authStore.reload();
 
-    testHub.connection.value.on('OnAlert', onAlert);
+    registerTestHubEvents(testHub.connection.value);
 });
 
 onUnmounted(() => {
-    testHub.connection.value.off('OnAlert', onAlert);
+    unregisterTestHubEvents(testHub.connection.value);
+});
+
+function registerTestHubEvents(connection) {
+    connection.on('OnAlert', onAlert);
+}
+
+function unregisterTestHubEvents(connection) {
+    connection.off('OnAlert', onAlert);
+}
+
+watch(testHub.connection, (newVal, oldVal) => {
+    // Most pages don't need to do anything when the connection changes because the connection won't change. However, the connection changes when the user changes, which
+    // could happen within App.
+    unregisterTestHubEvents(oldVal);
+    registerTestHubEvents(newVal);
 });
 
 </script>
