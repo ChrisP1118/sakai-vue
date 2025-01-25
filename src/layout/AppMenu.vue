@@ -35,6 +35,12 @@ const model = ref([
         ]
     },
     {
+        label: 'Troubleshooting',
+        items: [
+            { label: 'Debug', icon: 'pi pi-fw pi-wrench', to: '/debug' },
+        ]
+    },
+    {
         label: 'UI Components',
         items: [
             { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', to: '/uikit/formlayout' },

@@ -1,5 +1,4 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
-import { isShallow } from 'vue';
 
 export const useAuthStore = defineStore('auth', {
   state: () => {

@@ -79,6 +79,11 @@ const router = createRouter({
                     component: () => import('@/views/pages/tenants/Edit.vue')
                 },
                 {
+                    path: '/debug',
+                    name: 'debug',
+                    component: () => import('@/views/pages/Debug.vue')
+                },
+                {
                     path: '/uikit/formlayout',
                     name: 'formlayout',
                     component: () => import('@/views/uikit/FormLayout.vue')

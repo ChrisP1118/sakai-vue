@@ -1,45 +1,56 @@
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { HubConnectionBuilder, HubConnectionState } from "@microsoft/signalr";
 import { useAuthStore } from '@/stores/auth.js';
 
 const connection = ref(null);
+const accessToken = ref(null);
 
 export function useTestHub() {
 
-    if (connection.value != null)
-        return { connection };
+    const restart = () => {
+        if (connection.value && connection.value.state === HubConnectionState.Connected) {
+            console.log("Stopping TestHub connection");
+            connection.value.stop();
+        }
 
-    const authStore = useAuthStore();
+        connection.value = getNewConnection();
+        start();
+    };
 
-    connection.value = new HubConnectionBuilder()
-        .withUrl(import.meta.env.VITE_HUB_BASE_URL + "/test", { accessTokenFactory: () => {
-            console.log(`Using token: ${authStore.token}`);
-    
-            return authStore.token;
-        } })
-        .build();
+    const getNewConnection = () => {
+        return new HubConnectionBuilder()
+            .withUrl(import.meta.env.VITE_HUB_BASE_URL + "/test", { accessTokenFactory: () => {
+                accessToken.value = authStore.token;
+        
+                return accessToken.value;
+            } })
+            .withAutomaticReconnect()
+            .build();
+    };
 
-    connection.value.onclose(async () => {
-        await startSignalR();
-    });
-
-    async function startSignalR() {
+    async function start() {
         try {
+            console.log("Starting TestHub connection");
             await connection.value.start();
-            console.log("SignalR Connected.");
+            console.log("Started TestHub connection");
         } catch (err) {
             console.log(err);
-            setTimeout(startSignalR, 5000);
+            setTimeout(start, 5000);
         }
     };
     
-    if (connection.value.state === HubConnectionState.Disconnected)
-        startSignalR();
+    const authStore = useAuthStore();
 
-    function start() {
-        if (connection.value.state === HubConnectionState.Disconnected)
-            startSignalR();
-    }
-  
-    return { connection }
+    authStore.$subscribe((mutation, state) => {
+        if (state.token != accessToken.value)
+            restart();
+    })
+
+    if (connection.value && connection.value.state === HubConnectionState.Disconnected)
+        restart();
+
+    if (!connection.value)
+        connection.value = getNewConnection();
+
+    return { connection, restart }
 }
