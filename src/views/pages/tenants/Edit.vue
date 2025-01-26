@@ -53,9 +53,6 @@ function onFormSubmit(values) {
 <template>
     <Fluid>
         <Fields :item="item" :isSaving="isFetching" @form-submit="onFormSubmit">
-            <template #buttons>
-                <Button type="button" severity="secondary" label="Use" @click="authStore.setCurrentTenantId(route.params.id)" />
-            </template>
         </Fields>
     </Fluid>
 </template>

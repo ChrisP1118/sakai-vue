@@ -13,7 +13,6 @@ import { useAuthStore } from '@/stores/auth.js';
 import '@/assets/styles.scss';
 import '@/assets/tailwind.css';
 
-const pinia = createPinia();
 const app = createApp(App);
 
 app.use(createPinia());

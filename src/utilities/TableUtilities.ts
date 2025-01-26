@@ -3,11 +3,11 @@ import { useAuthStore } from '@/stores/auth.js';
 import { useFetchApi } from '@/utilities/ApiFetch';
 import debounce from "./Debounce";
 
-const { isFetching, fetchPost } = useFetchApi();
-const authStore = useAuthStore();
-
 export function useTableUtilities() {
-     const tableData = ref({
+    const { isFetching, fetchPost } = useFetchApi();
+    const authStore = useAuthStore();
+    
+    const tableData = ref({
          loading: false,
          totalRecords: 0,
          first: 0,

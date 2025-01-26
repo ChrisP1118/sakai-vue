@@ -5,6 +5,7 @@ import AppConfigurator from './AppConfigurator.vue';
 import Menu from 'primevue/menu';
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth.js';
+import TenantSelector from './TenantSelector.vue';
 
 const router = useRouter()
 const route = useRoute()
@@ -18,6 +19,31 @@ const toggleProfileMenu = (e) => {
     profileMenu.value.toggle(e);
 };
 
+const isTenantListOpen = ref(false);
+
+const showTenantList = () => {
+    isTenantListOpen.value = true;
+};
+
+const hideTenantList = () => {
+    isTenantListOpen.value = false;
+};
+
+const switchTenant = (tenantId) => {
+    hideTenantList();
+    
+    let oldTenantID = authStore.getCurrentTenantId();
+
+    authStore.setCurrentTenantId(tenantId);
+
+    if (router.currentRoute.value.path.startsWith('/tenants/' + oldTenantID)) {
+        let newPath = router.currentRoute.value.path.replace('/tenants/' + oldTenantID, '/tenants/' + tenantId);
+        router.push({ path: newPath });
+    } else {
+        router.push({ path: '/' });
+    }
+};
+
 const profileMenuItems = computed(() => {
     let menuItems = [];
     let tenantItems = [];
@@ -28,19 +54,20 @@ const profileMenuItems = computed(() => {
                 label: tenant.name,
                 icon: 'pi pi-fw ' + (tenant.id == authStore.currentTenantId ? 'pi-check-circle' : 'pi-circle'),
                 command: () => {
-                    let oldTenantID = authStore.getCurrentTenantId();
-
-                    authStore.setCurrentTenantId(tenant.id);
-
-                    if (router.currentRoute.value.path.startsWith('/tenants/' + oldTenantID)) {
-                        let newPath = router.currentRoute.value.path.replace('/tenants/' + oldTenantID, '/tenants/' + tenant.id);
-                        router.push({ path: newPath });
-                    } else {
-                        router.push({ path: '/' });
-                    }
+                    switchTenant(tenant.id);
                 }
             });
         });
+
+        if (authStore.allTenants) {
+            tenantItems.push({
+                label: 'Switch Tenant...',
+                icon: 'pi pi-fw pi-list',
+                command: () => {
+                    showTenantList();
+                }
+            });
+        }
 
         menuItems.push({
             label: 'Tenants',
@@ -77,6 +104,16 @@ const profileMenuItems = computed(() => {
 </script>
 
 <template>
+
+    <Dialog header="Switch Tenant" v-model:visible="isTenantListOpen" :breakpoints="{ '960px': '75vw' }" :style="{ width: '30vw' }" :modal="true">
+        <div class="card">
+            <TenantSelector v-if="isTenantListOpen" @tenant-selected="switchTenant" />
+        </div>
+        <template #footer>
+            <Button label="Cancel" @click="hideTenantList" />
+        </template>
+    </Dialog>
+
     <div class="layout-topbar">
         <div class="layout-topbar-logo-container">
             <button class="layout-menu-button layout-topbar-action" @click="toggleMenu">

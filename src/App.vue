@@ -62,4 +62,3 @@ watch(workItemHub.connection, (newVal, oldVal) => {
 </template>
 
 <style scoped></style>
-@/utilities/Hubs
