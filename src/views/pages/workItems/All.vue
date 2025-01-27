@@ -15,6 +15,7 @@ const tableUtils = tableUtilities.useTableUtilities();
 const filters = ref({
     id: { value: null, matchMode: FilterMatchMode.EQUALS },
     name: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    description: { value: null, matchMode: FilterMatchMode.STARTS_WITH }
 });
 
 onMounted(() => {
@@ -87,7 +88,16 @@ watch(
                         </div>
                     </template>
                 </Column>
-                <Column field="description" header="Description" sortable></Column>
+                <Column field="description" header="Description">
+                    <template #filter="{ filterModel, filterCallback }">
+                        <InputText v-model="filterModel.value" type="text" @input="filterCallback()" placeholder="Search by description" />
+                    </template>
+                    <template #body="{ data }">
+                        <div class="flex items-center gap-2">
+                            <span>{{ data.description }}</span>
+                        </div>
+                    </template>
+                </Column>
                 <Column field="status" header="Status" sortable></Column>
                 <Column field="draftedAt" header="Drafted At" sortable></Column>
                 <Column field="readyAt" header="Ready At" sortable></Column>
