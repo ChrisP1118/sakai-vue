@@ -138,7 +138,7 @@ const profileMenuItems = computed(() => {
                     </g>
                 </svg>
 
-                <span>{{ authStore.currentTenantName }}</span>
+                <span>Wisconsin Ticket</span>
             </router-link>
         </div>
 
@@ -181,11 +181,6 @@ const profileMenuItems = computed(() => {
                         <span>Profile</span>
                     </button>
                     <Menu ref="profileMenu" id="overlay_menu" :model="profileMenuItems" :popup="true">
-                        <template #start v-if="authStore.isLoggedIn">
-                            <span class="inline-flex items-center gap-1 px-2 py-2">
-                                <span class="text-xl font-semibold">{{ authStore.currentTenantName }}</span>
-                            </span>
-                        </template>
                         <template #end v-if="authStore.isLoggedIn">
                             <button class="relative overflow-hidden w-full border-0 bg-transparent flex items-start p-2 pl-4 hover:bg-surface-100 dark:hover:bg-surface-800 rounded-none cursor-pointer transition-colors duration-200">
                                 <Avatar image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" class="mr-2" shape="circle" />
