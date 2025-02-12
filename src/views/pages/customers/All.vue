@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import { FilterMatchMode } from '@primevue/core';
 import { onMounted, ref, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router'
@@ -11,25 +11,24 @@ const tableUtils = tableUtilities.useTableUtilities();
 const dt = ref();
 
 const filters = ref({
-    username: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-    firstName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-    lastName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-    emailAddress: { value: null, matchMode: FilterMatchMode.STARTS_WITH }
+    id: { value: null, matchMode: FilterMatchMode.EQUALS },
+    phoneNumber: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
 });
 
 onMounted(() => {
-    tableUtils.init('/v1/user/query');
+    tableUtils.init('/v1/customer/query');
 });
 
 function onRowClick(event) {
     var item = tableUtils.pagedItems.value[event.index];
-    router.push({ path: '/users/' + item.id });
+    router.push({ path: '/customers/' + item.id });
 }
 
 </script>
 
 <template>
     <div>
+
         <DataTable
             ref="dt"
             dataKey="id"
@@ -45,7 +44,7 @@ function onRowClick(event) {
             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink CurrentPageReport RowsPerPageDropdown"
             :pageLinkSize="(tableUtils.tableData.value.first / tableUtils.tableData.value.rows) + 2"
             :rowsPerPageOptions="[5, 10, 25, 50, 100]"
-            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} users"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} customers"
             :totalRecords="tableUtils.tableData.value.totalRecords"
             :loading="tableUtils.tableData.value.loading"
             filterDisplay="row"
@@ -61,31 +60,18 @@ function onRowClick(event) {
                         <InputText placeholder="Search..." />
                     </IconField>
 
-                    <Button label="New User" icon="pi pi-plus-circle" severity="secondary" as="router-link" to="/users/new" />
+                    <Button label="New Customer" icon="pi pi-plus-circle" severity="secondary" as="router-link" to="/customers/new" />
                 </div>
             </template>
 
             <!-- <Column selectionMode="multiple" style="width: 3rem" :exportable="false"></Column> -->
-            <!-- <Column field="id" header="ID" sortable style="min-width: 6rem"></Column> -->
-            <!-- <Column field="username" :header="'Username' + (filters.username.value ? ': ' + filters.username.value : '')" sortable :showFilterMatchModes="false"> -->
-            <Column field="username" header="Username" sortable :showFilterMatchModes="false">
+            <Column field="id" header="ID" sortable style="min-width: 6rem"></Column>
+            <Column field="phoneNumber" header="Phone Number" sortable>
                 <template #filter="{ filterModel, filterCallback }">
-                    <InputText v-model="filterModel.value" type="text" @input="filterCallback()" placeholder="Search by username" />
-                </template>
-                <template #body="{ data }">
-                    <div class="flex items-center gap-2">
-                        <Avatar :label="data.avatarLabel" class="mr-2" :style="'background-color: ' + data.avatarBackgroundColor" shape="circle" />
-                        <span>{{ data.username }}</span>
-                    </div>
+                    <InputText v-model="filterModel.value" type="text" @input="filterCallback()" placeholder="Search by name" />
                 </template>
             </Column>
-            <Column field="emailAddress" header="Email" sortable>
-                <template #filter="{ filterModel, filterCallback }">
-                    <InputText v-model="filterModel.value" type="text" @input="filterCallback()" placeholder="Search by email" />
-                </template>
-            </Column>
-            <Column field="firstName" header="First Name" sortable></Column>
-            <Column field="lastName" header="Last Name" sortable></Column>
+            <Column field="createdAt" header="Created At" sortable></Column>
         </DataTable>
     </div>
 </template>

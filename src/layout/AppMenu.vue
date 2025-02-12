@@ -14,17 +14,12 @@ const model = ref([
         items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/' }]
     },
     {
-        label: 'Work Items',
+        label: 'Tickets',
         items: [
-            // We use a "command" here, instead of "to", because this value is set when the app loads, but the current tenant id could change later on
-            { label: 'Work Items', icon: 'pi pi-fw pi-list-check', appMenuItemName: 'workItems', command: () => { router.push({ path: '/tenants/' + authStore.currentTenantId + '/workItems' }); }},
-        ]
-    },
-    {
-        label: 'Admin',
-        items: [
-            // We use a "command" here, instead of "to", because this value is set when the app loads, but the current tenant id could change later on
-            { label: 'Users', icon: 'pi pi-fw pi-user', appMenuItemName: 'users', command: () => { router.push({ path: '/tenants/' + authStore.currentTenantId + '/users' }); }},
+            { label: 'Customers', icon: 'pi pi-fw pi-user', to: '/customers', appMenuItemName: 'customers' },
+            { label: 'Messages', icon: 'pi pi-fw pi-inbox', appMenuItemName: 'messages', command: () => { router.push({ path: '/tenants/' + authStore.currentTenantId + '/workItems' }); }},
+            { label: 'Citations', icon: 'pi pi-fw pi-ticket', appMenuItemName: 'citations', command: () => { router.push({ path: '/tenants/' + authStore.currentTenantId + '/workItems' }); }},
+            { label: 'Documents', icon: 'pi pi-fw pi-file', appMenuItemName: 'documents', command: () => { router.push({ path: '/tenants/' + authStore.currentTenantId + '/workItems' }); }},
         ]
     },
     {

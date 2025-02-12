@@ -14,45 +14,77 @@ const router = createRouter({
                     component: () => import('@/views/Dashboard.vue')
                 },
                 {
-                    path: '/tenants/:tenantId/workItems',
-                    name: 'allWorkItems',
-                    component: () => import('@/views/pages/workItems/All.vue'),
+                    path: '/customers',
+                    name: 'allCustomers',
+                    component: () => import('@/views/pages/customers/All.vue')
+                },
+                {
+                    path: '/customers/:id',
+                    name: 'viewCustomer',
+                    component: () => import('@/views/pages/customers/View.vue'),
                     meta: {
-                        appMenuItemName: 'workItems'
+                        appMenuItemName: 'customers'
                     }
                 },
                 {
-                    path: '/tenants/:tenantId/workItems/new',
-                    name: 'newWorkItem',
-                    component: () => import('@/views/pages/workItems/New.vue'),
+                    path: '/customers/:customerId/citations',
+                    name: 'allCustomerCitations',
+                    props: true,
+                    component: () => import('@/views/pages/customers/citations/All.vue'),
                     meta: {
-                        appMenuItemName: 'workItems'
+                        appMenuItemName: 'customers'
                     }
                 },
                 {
-                    path: '/tenants/:tenantId/workItems/:id',
-                    name: 'editWorkItem',
-                    component: () => import('@/views/pages/workItems/Edit.vue'),
+                    path: '/customers/:customerId/messages',
+                    name: 'allCustomerMessages',
+                    props: true,
+                    component: () => import('@/views/pages/customers/messages/All.vue'),
                     meta: {
-                        appMenuItemName: 'workItems'
+                        appMenuItemName: 'customers'
                     }
                 },
                 {
-                    path: '/tenants/:tenantId/users',
-                    name: 'allTenantUsers',
-                    component: () => import('@/views/pages/tenantUsers/All.vue'),
+                    path: '/customers/:customerId/documents',
+                    name: 'allCustomerDocuments',
+                    props: true,
+                    component: () => import('@/views/pages/customers/documents/All.vue'),
                     meta: {
-                        appMenuItemName: 'users'
+                        appMenuItemName: 'customers'
                     }
                 },
-                {
-                    path: '/tenants/:tenantId/users/:id',
-                    name: 'editTenantUser',
-                    component: () => import('@/views/pages/tenantUsers/Edit.vue'),
-                    meta: {
-                        appMenuItemName: 'users'
-                    }
-                },
+                // {
+                //     path: '/tenants/:tenantId/workItems/new',
+                //     name: 'newWorkItem',
+                //     component: () => import('@/views/pages/workItems/New.vue'),
+                //     meta: {
+                //         appMenuItemName: 'workItems'
+                //     }
+                // },
+                // {
+                //     path: '/tenants/:tenantId/workItems/:id',
+                //     name: 'editWorkItem',
+                //     component: () => import('@/views/pages/workItems/Edit.vue'),
+                //     meta: {
+                //         appMenuItemName: 'workItems'
+                //     }
+                // },
+                // {
+                //     path: '/tenants/:tenantId/users',
+                //     name: 'allTenantUsers',
+                //     component: () => import('@/views/pages/tenantUsers/All.vue'),
+                //     meta: {
+                //         appMenuItemName: 'users'
+                //     }
+                // },
+                // {
+                //     path: '/tenants/:tenantId/users/:id',
+                //     name: 'editTenantUser',
+                //     component: () => import('@/views/pages/tenantUsers/Edit.vue'),
+                //     meta: {
+                //         appMenuItemName: 'users'
+                //     }
+                // },
                 {
                     path: '/users',
                     name: 'allUsers',
@@ -63,21 +95,21 @@ const router = createRouter({
                     name: 'editUser',
                     component: () => import('@/views/pages/users/Edit.vue')
                 },
-                {
-                    path: '/tenants',
-                    name: 'allTenants',
-                    component: () => import('@/views/pages/tenants/All.vue')
-                },
-                {
-                    path: '/tenants/new',
-                    name: 'newTenant',
-                    component: () => import('@/views/pages/tenants/New.vue')
-                },
-                {
-                    path: '/tenants/:id',
-                    name: 'editTenant',
-                    component: () => import('@/views/pages/tenants/Edit.vue')
-                },
+                // {
+                //     path: '/tenants',
+                //     name: 'allTenants',
+                //     component: () => import('@/views/pages/tenants/All.vue')
+                // },
+                // {
+                //     path: '/tenants/new',
+                //     name: 'newTenant',
+                //     component: () => import('@/views/pages/tenants/New.vue')
+                // },
+                // {
+                //     path: '/tenants/:id',
+                //     name: 'editTenant',
+                //     component: () => import('@/views/pages/tenants/Edit.vue')
+                // },
                 {
                     path: '/debug',
                     name: 'debug',
