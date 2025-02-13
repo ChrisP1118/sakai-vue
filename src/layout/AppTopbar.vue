@@ -120,7 +120,8 @@ const profileMenuItems = computed(() => {
                 <i class="pi pi-bars"></i>
             </button>
             <router-link to="/" class="layout-topbar-logo">
-                <svg viewBox="0 0 54 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <i class="pi pi-fw pi-ticket" />
+                <!-- <svg viewBox="0 0 54 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
                         fill-rule="evenodd"
                         clip-rule="evenodd"
@@ -136,7 +137,7 @@ const profileMenuItems = computed(() => {
                             fill="var(--primary-color)"
                         />
                     </g>
-                </svg>
+                </svg> -->
 
                 <span>Wisconsin Ticket</span>
             </router-link>
@@ -168,14 +169,6 @@ const profileMenuItems = computed(() => {
 
             <div class="layout-topbar-menu hidden lg:block">
                 <div class="layout-topbar-menu-content">
-                    <button type="button" class="layout-topbar-action">
-                        <i class="pi pi-calendar"></i>
-                        <span>Calendar</span>
-                    </button>
-                    <button type="button" class="layout-topbar-action">
-                        <i class="pi pi-inbox"></i>
-                        <span>Messages</span>
-                    </button>
                     <button type="button" class="layout-topbar-action" @click="toggleProfileMenu" aria-haspopup="true" aria-controls="overlay_menu">
                         <i class="pi pi-user"></i>
                         <span>Profile</span>

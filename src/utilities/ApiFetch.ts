@@ -29,6 +29,37 @@ export function useFetchApi() {
 
      };
 
+     const fetchGetAsObjectUrl = async (url) => {
+          isFetching.value = true;
+
+          const fullUrl = import.meta.env.VITE_API_BASE_URL + url;
+          const requestOptions = {
+               method: 'GET',
+               headers: {
+                    'Authorization': 'Bearer ' + authStore.token,
+               }
+          }
+
+          return fetch(fullUrl, requestOptions)
+               .then(response => response.blob())
+               .then(blob => {
+                    isFetching.value = false;
+
+                    return URL.createObjectURL(blob);
+               });
+               // .then(response => response.blob().then(data => ({status: response.status, blob: data})))
+               // .then(response => {
+               //      checkToken(response);
+
+               //      isFetching.value = false;
+
+               //      const objectUrl = URL.createObjectURL(response.blob);
+
+               //      return objectUrl;
+               // });
+
+     };
+
      const fetchPost = async (url, payload) => {
           isFetching.value = true;
 
@@ -111,6 +142,7 @@ export function useFetchApi() {
      return {
           isFetching,
           fetchGet,
+          fetchGetAsObjectUrl,
           fetchPost,
           fetchPut
      };

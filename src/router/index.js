@@ -53,6 +53,15 @@ const router = createRouter({
                         appMenuItemName: 'customers'
                     }
                 },
+                {
+                    path: '/customers/:customerId/documents/:id',
+                    name: 'viewCustomerDocuments',
+                    props: true,
+                    component: () => import('@/views/pages/customers/documents/View.vue'),
+                    meta: {
+                        appMenuItemName: 'customers'
+                    }
+                },
                 // {
                 //     path: '/tenants/:tenantId/workItems/new',
                 //     name: 'newWorkItem',
