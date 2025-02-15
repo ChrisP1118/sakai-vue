@@ -19,6 +19,7 @@ const id = ref(route.params.id);
 const citation = ref(null);
 const messages = ref(null);
 const documentSrcs = ref({});
+const newMessageText = ref("");
 
 onMounted(() => {
     loadItem();
@@ -65,6 +66,22 @@ function loadDocumentAsUrl(documentId) {
     })
 }
 
+function onSendMessage() {
+    fetchPost('/v1/intake/outbound', {
+        customerId: id.value,
+        text: newMessageText.value
+    })
+    .then(response => {
+        newMessageText.value = "";
+
+        loadMessages();
+    })
+}
+
+function viewDocument(documentId) {
+    router.push('/customers/' + id.value + '/documents/' + documentId);
+}
+
 </script>
 
 <template>
@@ -105,26 +122,44 @@ function loadDocumentAsUrl(documentId) {
                     <Card class="mb-4" v-if="citation">
                         <template #title><i class="pi pi-fw pi-ticket" /> Active Citation</template>
                         <template #content>
-                            <dl class="grid grid-cols-[repeat(2,auto)] gap-x-4 w-max">
-                                <dt>Status:</dt><dd>{{ citation.status }}</dd>
-                                <dt>Appearance Date:</dt><dd>{{ citation.appearanceDate }}</dd>
-                                <dt>Appearance Time:</dt><dd>{{ citation.appearanceTime }}</dd>
-                                <dt>Appearance Location:</dt>
-                                <dd>
-                                    {{ citation.appearanceLocation }}<br />
-                                    {{ citation.appearanceAddress1 }}<br />
-                                    {{ citation.appearanceCity }}, {{ citation.appearanceState }} {{ citation.appearanceZipCode }}
-                                </dd>
-                                <dt>Name:</dt><dd>{{ citation.defendantName }}</dd>
-                                <dt>Address:</dt>
-                                <dd>
-                                    {{ citation.defendantAddress1 }}<br />
-                                    {{ citation.defendantCity }}, {{ citation.defendantState }} {{ citation.defendantZipCode }}
-                                </dd>
-                                <dt>Citation Number:</dt><dd>{{ citation.citationNumber }}</dd>
-                                <dt>Points:</dt><dd>{{ citation.citationEstimatedPoints }}</dd>
-                                <dt>Fine:</dt><dd>{{ citation.citationDeposit }}</dd>
-                            </dl>
+                            <div class="grid grid-cols-3 gap-4">
+                                <div>
+                                    <span class="text-lg">Citation</span>
+                                    <hr />
+                                    <dl class="grid grid-cols-[repeat(2,auto)] gap-x-4 w-max">
+                                        <dt>Status:</dt><dd>{{ citation.status }}</dd>
+                                        <dt>Citation Number:</dt><dd>{{ citation.citationNumber }}</dd>
+                                        <dt>Points:</dt><dd>{{ citation.citationEstimatedPoints }}</dd>
+                                        <dt>Fine:</dt><dd>{{ citation.citationDeposit }}</dd>
+                                    </dl>
+                                </div>
+                                <div>
+                                    <span class="text-lg">Defendant</span>
+                                    <hr />
+                                    <dl class="grid grid-cols-[repeat(2,auto)] gap-x-4 w-max">
+                                        <dt>Name:</dt><dd>{{ citation.defendantName }}</dd>
+                                        <dt>Address:</dt>
+                                        <dd>
+                                            {{ citation.defendantAddress1 }}<br />
+                                            {{ citation.defendantCity }}, {{ citation.defendantState }} {{ citation.defendantZipCode }}
+                                        </dd>
+                                    </dl>
+                                </div>
+                                <div>
+                                    <span class="text-lg">Court Appearance</span>
+                                    <hr />
+                                    <dl class="grid grid-cols-[repeat(2,auto)] gap-x-4 w-max">
+                                        <dt>Appearance Date:</dt><dd>{{ citation.appearanceDate }}</dd>
+                                        <dt>Appearance Time:</dt><dd>{{ citation.appearanceTime }}</dd>
+                                        <dt>Appearance Location:</dt>
+                                        <dd>
+                                            {{ citation.appearanceLocation }}<br />
+                                            {{ citation.appearanceAddress1 }}<br />
+                                            {{ citation.appearanceCity }}, {{ citation.appearanceState }} {{ citation.appearanceZipCode }}
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
                         </template>
                     </Card>
                 </TabPanel>
@@ -141,7 +176,7 @@ function loadDocumentAsUrl(documentId) {
                                 <div>
                                     {{ slotProps.item.text }}
                                     <div v-if="slotProps.item.documentId">
-                                        <img :src="documentSrcs[slotProps.item.documentId]" />
+                                        <img :src="documentSrcs[slotProps.item.documentId]" @click="viewDocument(slotProps.item.documentId)" />
                                     </div>
                                 </div>
                             </Message>                                
@@ -150,14 +185,16 @@ function loadDocumentAsUrl(documentId) {
                     <div class="justify-center mb-4 mt-4">
                         <hr />
                     </div>
-                    <div class="flex justify-center">
-                        <InputGroup>
-                            <InputText />
-                            <InputGroupAddon>
-                                <Button icon="pi pi-send" severity="info" />
-                            </InputGroupAddon>
-                        </InputGroup>
-                    </div>
+                    <Form @submit="onSendMessage">
+                        <div class="flex justify-center">
+                            <InputGroup>
+                                <InputText v-model="newMessageText" />
+                                <InputGroupAddon>
+                                    <Button type="submit" icon="pi pi-send" severity="info" />
+                                </InputGroupAddon>
+                            </InputGroup>
+                        </div>
+                    </Form>
                 </TabPanel>
                 <TabPanel value="2" as="p" class="m-0">
                     <CitationsList :customerId="id" />
@@ -175,6 +212,6 @@ function loadDocumentAsUrl(documentId) {
 
 <style lang="scss">
     .p-timeline-event-content {
-        flex: 3;
+        flex: 3 !important;
     }
 </style>
