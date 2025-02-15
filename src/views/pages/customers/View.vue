@@ -131,6 +131,8 @@ function viewDocument(documentId) {
                                         <dt>Citation Number:</dt><dd>{{ citation.citationNumber }}</dd>
                                         <dt>Points:</dt><dd>{{ citation.citationEstimatedPoints }}</dd>
                                         <dt>Fine:</dt><dd>{{ citation.citationDeposit }}</dd>
+                                        <dt>Cash:</dt><dd>{{ citation.citationCash }}</dd>
+                                        <dt>Card:</dt><dd>{{ citation.citationCard }}</dd>
                                     </dl>
                                 </div>
                                 <div>
@@ -143,12 +145,20 @@ function viewDocument(documentId) {
                                             {{ citation.defendantAddress1 }}<br />
                                             {{ citation.defendantCity }}, {{ citation.defendantState }} {{ citation.defendantZipCode }}
                                         </dd>
+                                        <dt>Birth Date:</dt><dd>{{ citation.defendantBirthDate }}</dd>
+                                        <dt>Sex:</dt><dd>{{ citation.defendantSex }}</dd>
+                                        <dt>Race:</dt><dd>{{ citation.defendantRace }}</dd>
+                                        <dt>Height:</dt><dd>{{ citation.defendantHeight }}</dd>
+                                        <dt>Weight:</dt><dd>{{ citation.defendantWeight }}</dd>
+                                        <dt>Hair:</dt><dd>{{ citation.defendantHair }}</dd>
+                                        <dt>Eyes:</dt><dd>{{ citation.defendantEyes }}</dd>
                                     </dl>
                                 </div>
                                 <div>
                                     <span class="text-lg">Court Appearance</span>
                                     <hr />
                                     <dl class="grid grid-cols-[repeat(2,auto)] gap-x-4 w-max">
+                                        <dt>Appearance Required:</dt><dd>{{ (citation.appearanceRequired ? 'Yes' : 'No') }}</dd>
                                         <dt>Appearance Date:</dt><dd>{{ citation.appearanceDate }}</dd>
                                         <dt>Appearance Time:</dt><dd>{{ citation.appearanceTime }}</dd>
                                         <dt>Appearance Location:</dt>
