@@ -33,7 +33,13 @@ export function useTableUtilities() {
 
         for (const prop in event.filters)
             if (event.filters[prop].value)
-                filters.push( { field: prop, value: event.filters[prop].value } );
+            {
+                let val = event.filters[prop].value;
+                if (event.filters[prop].getValue)
+                    val = event.filters[prop].getValue(val);
+
+                filters.push( { field: prop, value: val } );
+            }
 
         fetchPost(queryUrl.value, {
           continuationToken: tableData.value.continuationToken,
@@ -56,7 +62,7 @@ export function useTableUtilities() {
         });
     };
 
-    const init = (newQueryUrl) => {
+    const init = (newQueryUrl, dt) => {
         if (newQueryUrl)
             queryUrl.value = newQueryUrl;
         items.value = [];
@@ -64,7 +70,9 @@ export function useTableUtilities() {
     
         loadQuery({
             first: tableData.value.first,
-            rows: tableData.value.rows
+            rows: tableData.value.rows,
+            sortField: dt?.value?.sortField,
+            sortOrder: dt?.value?.sortOrder,
         }, false);
     };
     

@@ -52,7 +52,7 @@ function onRowClick(event) {
             @row-click="onRowClick"
             resizableColumns columnResizeMode="fit" showGridlines :reorderableColumns="true" 
         >
-            <template #header>
+            <!-- <template #header>
                 <div class="flex flex-wrap gap-2 items-center justify-between">
                     <IconField>
                         <InputIcon>
@@ -63,7 +63,7 @@ function onRowClick(event) {
 
                     <Button label="New User" icon="pi pi-plus-circle" severity="secondary" as="router-link" to="/users/new" />
                 </div>
-            </template>
+            </template> -->
 
             <!-- <Column selectionMode="multiple" style="width: 3rem" :exportable="false"></Column> -->
             <!-- <Column field="id" header="ID" sortable style="min-width: 6rem"></Column> -->

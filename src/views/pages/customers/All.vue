@@ -3,6 +3,7 @@ import { FilterMatchMode } from '@primevue/core';
 import { onMounted, ref, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router'
 import * as tableUtilities from '@/utilities/TableUtilities';
+import { DateTime } from "luxon";
 
 const router = useRouter()
 const route = useRoute()
@@ -12,11 +13,11 @@ const dt = ref();
 
 const filters = ref({
     id: { value: null, matchMode: FilterMatchMode.EQUALS },
-    phoneNumber: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    phoneNumber: { value: null, matchMode: FilterMatchMode.STARTS_WITH, getValue: (x) => { return x.replace(/\D/g,'');; } },
 });
 
 onMounted(() => {
-    tableUtils.init('/v1/customer/query');
+    tableUtils.init('/v1/customer/query', dt);
 });
 
 function onRowClick(event) {
@@ -36,6 +37,8 @@ function onRowClick(event) {
             :value="tableUtils.pagedItems.value"
             @page="tableUtils.onPage"
             @sort="tableUtils.onSort"
+            sortField="createdAt"
+            :sortOrder="-1"
             @filter="tableUtils.onFilter"
             v-model:filters="filters"
             :paginator="true"
@@ -51,7 +54,7 @@ function onRowClick(event) {
             @row-click="onRowClick"
             resizableColumns columnResizeMode="fit" showGridlines :reorderableColumns="true" 
         >
-            <template #header>
+            <!-- <template #header>
                 <div class="flex flex-wrap gap-2 items-center justify-between">
                     <IconField>
                         <InputIcon>
@@ -62,16 +65,25 @@ function onRowClick(event) {
 
                     <Button label="New Customer" icon="pi pi-plus-circle" severity="secondary" as="router-link" to="/customers/new" />
                 </div>
-            </template>
+            </template> -->
 
             <!-- <Column selectionMode="multiple" style="width: 3rem" :exportable="false"></Column> -->
-            <Column field="id" header="ID" sortable style="min-width: 6rem"></Column>
+            <!-- <Column field="id" header="ID" sortable style="min-width: 6rem"></Column> -->
             <Column field="phoneNumber" header="Phone Number" sortable>
                 <template #filter="{ filterModel, filterCallback }">
                     <InputText v-model="filterModel.value" type="text" @input="filterCallback()" placeholder="Search by name" />
+                    <!-- <InputMask v-model="filterModel.value" @input="filterCallback()" placeholder="Search by phone number" mask="(999) 999-9999" /> -->
+                </template>
+                <template #body="slotProps">
+                    {{ slotProps.data.phoneNumber.replace(/\D+/g, '').replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3') }}
                 </template>
             </Column>
-            <Column field="createdAt" header="Created At" sortable></Column>
+            <Column field="createdAt" header="Created At" sortable>
+                <template #body="slotProps">
+                    {{ DateTime.fromISO(slotProps.data.createdAt).toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY) }}
+                    {{ DateTime.fromISO(slotProps.data.createdAt).toLocaleString(DateTime.TIME_WITH_SHORT_OFFSET) }}
+                </template>
+            </Column>
         </DataTable>
     </div>
 </template>

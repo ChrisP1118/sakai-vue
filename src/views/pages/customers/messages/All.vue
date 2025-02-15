@@ -18,7 +18,7 @@ const filters = ref({
 });
 
 onMounted(() => {
-    tableUtils.init('/v1/customer/' + props.customerId + '/message/query');
+    tableUtils.init('/v1/customer/' + props.customerId + '/message/query', dt);
 });
 
 function onRowClick(event) {
@@ -37,6 +37,8 @@ function onRowClick(event) {
                 :value="tableUtils.pagedItems.value"
                 @page="tableUtils.onPage"
                 @sort="tableUtils.onSort"
+                sortField="timestamp"
+                :sortOrder="-1"
                 @filter="tableUtils.onFilter"
                 v-model:filters="filters"
                 :paginator="true"
@@ -52,19 +54,8 @@ function onRowClick(event) {
                 @row-click="onRowClick"
                 resizableColumns columnResizeMode="fit" showGridlines :reorderableColumns="true" 
             >
-                <template #header>
-                    <div class="flex flex-wrap gap-2 items-center justify-between">
-                        <IconField>
-                            <InputIcon>
-                                <i class="pi pi-search" />
-                            </InputIcon>
-                            <InputText placeholder="Search..." />
-                        </IconField>
-                    </div>
-                </template>
 
-                <!-- <Column selectionMode="multiple" style="width: 3rem" :exportable="false"></Column> -->
-                <Column field="id" header="ID" sortable></Column>
+                <!-- <Column field="id" header="ID" sortable></Column> -->
                 <Column field="messageType" header="Type" sortable></Column>
                 <Column field="text" header="Text" sortable></Column>
                 <Column field="timestamp" header="Timestamp" sortable></Column>

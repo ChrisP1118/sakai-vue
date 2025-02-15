@@ -18,7 +18,7 @@ const filters = ref({
 });
 
 onMounted(() => {
-    tableUtils.init('/v1/customer/' + props.customerId + '/citation/query');
+    tableUtils.init('/v1/customer/' + props.customerId + '/citation/query', dt);
 });
 
 function onRowClick(event) {
@@ -52,19 +52,8 @@ function onRowClick(event) {
                 @row-click="onRowClick"
                 resizableColumns columnResizeMode="fit" showGridlines :reorderableColumns="true" 
             >
-                <template #header>
-                    <div class="flex flex-wrap gap-2 items-center justify-between">
-                        <IconField>
-                            <InputIcon>
-                                <i class="pi pi-search" />
-                            </InputIcon>
-                            <InputText placeholder="Search..." />
-                        </IconField>
-                    </div>
-                </template>
 
-                <!-- <Column selectionMode="multiple" style="width: 3rem" :exportable="false"></Column> -->
-                <Column field="id" header="ID" sortable style="min-width: 6rem"></Column>
+                <!-- <Column field="id" header="ID" sortable style="min-width: 6rem"></Column> -->
                 <Column field="status" header="Status" sortable></Column>
                 <Column field="appearanceDate" header="Appearance Date" sortable></Column>
                 <Column field="appearanceTime" header="Appearance Time" sortable></Column>

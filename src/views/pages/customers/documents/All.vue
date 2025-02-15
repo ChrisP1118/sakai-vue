@@ -18,7 +18,7 @@ const filters = ref({
 });
 
 onMounted(() => {
-    tableUtils.init('/v1/customer/' + props.customerId + '/document/query');
+    tableUtils.init('/v1/customer/' + props.customerId + '/document/query', dt);
 });
 
 function onRowClick(event) {
@@ -52,19 +52,8 @@ function onRowClick(event) {
                 @row-click="onRowClick"
                 resizableColumns columnResizeMode="fit" showGridlines :reorderableColumns="true" 
             >
-                <template #header>
-                    <div class="flex flex-wrap gap-2 items-center justify-between">
-                        <IconField>
-                            <InputIcon>
-                                <i class="pi pi-search" />
-                            </InputIcon>
-                            <InputText placeholder="Search..." />
-                        </IconField>
-                    </div>
-                </template>
 
-                <!-- <Column selectionMode="multiple" style="width: 3rem" :exportable="false"></Column> -->
-                <Column field="id" header="ID" sortable></Column>
+                <!-- <Column field="id" header="ID" sortable></Column> -->
                 <Column field="createdAt" header="Created At" sortable></Column>
                 <Column field="processingStartedAt" header="Processing Started At" sortable></Column>
                 <Column field="processingFinishedAt" header="Processing Finished At" sortable></Column>
