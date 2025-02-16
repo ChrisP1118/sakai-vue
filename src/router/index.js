@@ -19,7 +19,7 @@ const router = createRouter({
                     component: () => import('@/views/pages/customers/All.vue')
                 },
                 {
-                    path: '/customers/:id',
+                    path: '/customers/:customerId',
                     name: 'viewCustomer',
                     component: () => import('@/views/pages/customers/View.vue'),
                     meta: {
@@ -31,6 +31,15 @@ const router = createRouter({
                     name: 'allCustomerCitations',
                     props: true,
                     component: () => import('@/views/pages/customers/citations/All.vue'),
+                    meta: {
+                        appMenuItemName: 'customers'
+                    }
+                },
+                {
+                    path: '/customers/:customerId/citations/:citationId',
+                    name: 'allCustomerCitations',
+                    props: true,
+                    component: () => import('@/views/pages/customers/View.vue'),
                     meta: {
                         appMenuItemName: 'customers'
                     }
@@ -61,6 +70,11 @@ const router = createRouter({
                     meta: {
                         appMenuItemName: 'customers'
                     }
+                },
+                {
+                    path: '/citations',
+                    name: 'allCitations',
+                    component: () => import('@/views/pages/citations/All.vue')
                 },
                 // {
                 //     path: '/tenants/:tenantId/workItems/new',

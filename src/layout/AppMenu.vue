@@ -17,8 +17,8 @@ const model = ref([
         label: 'Tickets',
         items: [
             { label: 'Customers', icon: 'pi pi-fw pi-user', to: '/customers', appMenuItemName: 'customers' },
+            { label: 'Citations', icon: 'pi pi-fw pi-ticket', to: '/citations', appMenuItemName: 'citations' },
             //{ label: 'Messages', icon: 'pi pi-fw pi-inbox', appMenuItemName: 'messages', command: () => { router.push({ path: '/tenants/' + authStore.currentTenantId + '/workItems' }); }},
-            //{ label: 'Citations', icon: 'pi pi-fw pi-ticket', appMenuItemName: 'citations', command: () => { router.push({ path: '/tenants/' + authStore.currentTenantId + '/workItems' }); }},
             //{ label: 'Documents', icon: 'pi pi-fw pi-file', appMenuItemName: 'documents', command: () => { router.push({ path: '/tenants/' + authStore.currentTenantId + '/workItems' }); }},
         ]
     },

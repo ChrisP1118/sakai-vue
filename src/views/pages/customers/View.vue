@@ -15,7 +15,8 @@ const toast = useToast();
 const { isFetching, fetchGet, fetchPut, fetchPost, fetchGetAsObjectUrl } = useFetchApi();
 const authStore = useAuthStore();
 const item = ref();
-const id = ref(route.params.id);
+const id = ref(route.params.customerId);
+const citationId = ref(route.params.citationId);
 const citation = ref(null);
 const messages = ref(null);
 const documentSrcs = ref({});
@@ -31,8 +32,10 @@ function loadItem() {
     .then(response => {
         item.value = response.body;
 
-        if (item.value.activeCitationId)
-            loadCitation(item.value.activeCitationId);
+        if (!citationId.value && item.value.activeCitationId)
+            citationId.value = item.value.activeCitationId;
+
+        loadCitation(citationId.value);
     })
 }
 
@@ -120,7 +123,7 @@ function viewDocument(documentId) {
                         </template>
                     </Card>
                     <Card class="mb-4" v-if="citation">
-                        <template #title><i class="pi pi-fw pi-ticket" /> Active Citation</template>
+                        <template #title><i class="pi pi-fw pi-ticket" /> {{ item && citationId == item.activeCitationId ? 'Active Citation' : 'Citation' }}</template>
                         <template #content>
                             <div class="grid grid-cols-3 gap-4">
                                 <div>
