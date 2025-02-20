@@ -3,6 +3,7 @@ import { FilterMatchMode } from '@primevue/core';
 import { onMounted, ref, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router'
 import * as tableUtilities from '@/utilities/TableUtilities';
+import { DateTime } from "luxon";
 
 const router = useRouter()
 const route = useRoute()
@@ -54,9 +55,24 @@ function onRowClick(event) {
             >
 
                 <!-- <Column field="id" header="ID" sortable></Column> -->
-                <Column field="createdAt" header="Created At" sortable></Column>
-                <Column field="processingStartedAt" header="Processing Started At" sortable></Column>
-                <Column field="processingFinishedAt" header="Processing Finished At" sortable></Column>
+                <Column header="Created At" sortable>
+                    <template #body="{ data }">
+                        {{ DateTime.fromISO(data.createdAt).toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY) }}
+                        {{ DateTime.fromISO(data.createdAt).toLocaleString(DateTime.TIME_WITH_SHORT_OFFSET) }}
+                    </template>
+                </Column>
+                <Column header="Processing Started At" sortable>
+                    <template #body="{ data }">
+                        {{ DateTime.fromISO(data.processingStartedAt).toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY) }}
+                        {{ DateTime.fromISO(data.processingStartedAt).toLocaleString(DateTime.TIME_WITH_SHORT_OFFSET) }}
+                    </template>
+                </Column>
+                <Column header="Processing Finished At" sortable>
+                    <template #body="{ data }">
+                        {{ DateTime.fromISO(data.processingFinishedAt).toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY) }}
+                        {{ DateTime.fromISO(data.processingFinishedAt).toLocaleString(DateTime.TIME_WITH_SHORT_OFFSET) }}
+                    </template>
+                </Column>
             </DataTable>
 
     </div>
