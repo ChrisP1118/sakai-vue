@@ -131,7 +131,10 @@ function viewDocument(documentId) {
                     <div v-if="citation">
                         <div class="grid grid-cols-3 gap-4">
                             <Card>
-                                <template #title>Citation</template>
+                                <template #title>
+                                    Citation
+                                    <hr />
+                                </template>
                                 <template #content>
                                     <dl class="grid grid-cols-[repeat(2,auto)] gap-x-4 w-max">
                                         <dt>Status:</dt><dd>{{ citation.status }}</dd>
@@ -144,7 +147,10 @@ function viewDocument(documentId) {
                                 </template>
                             </Card>                                
                             <Card>
-                                <template #title>Court Appearance</template>
+                                <template #title>
+                                    Court Appearance
+                                    <hr />
+                                </template>
                                 <template #content>
                                     <dl class="grid grid-cols-[repeat(2,auto)] gap-x-4 w-max">
                                         <dt>Plaintiff:</dt><dd> {{ citation.plaintiff }}</dd>
@@ -166,7 +172,10 @@ function viewDocument(documentId) {
                                 </div>
                             </div>
                             <Card>
-                                <template #title>Violation</template>
+                                <template #title>
+                                    Violation
+                                    <hr />
+                                </template>
                                 <template #content>
                                     <dl class="grid grid-cols-[repeat(2,auto)] gap-x-4 w-max">
                                         <dt>Ordinance:</dt><dd>{{ citation.violationOrdinance }}</dd>
@@ -190,7 +199,10 @@ function viewDocument(documentId) {
                                 </template>
                             </Card>                                
                             <Card>
-                                <template #title>Defendant</template>
+                                <template #title>
+                                    Defendant
+                                    <hr />
+                                </template>
                                 <template #content>
                                     <dl class="grid grid-cols-[repeat(2,auto)] gap-x-4 w-max">
                                         <dt>Name:</dt><dd>{{ citation.defendantName }}</dd>
@@ -210,7 +222,10 @@ function viewDocument(documentId) {
                                 </template>
                             </Card>
                             <Card>
-                                <template #title>License</template>
+                                <template #title>
+                                    License
+                                    <hr />
+                                </template>
                                 <template #content>
                                     <dl class="grid grid-cols-[repeat(2,auto)] gap-x-4 w-max">
                                         <dt>Number:</dt><dd>{{ citation.licenseNumber }}</dd>
@@ -220,7 +235,10 @@ function viewDocument(documentId) {
                                 </template>
                             </Card>
                             <Card>
-                                <template #title>Plate</template>
+                                <template #title>
+                                    Plate
+                                    <hr />
+                                </template>
                                 <template #content>
                                     <dl class="grid grid-cols-[repeat(2,auto)] gap-x-4 w-max">
                                         <dt>Number:</dt><dd>{{ citation.plateNumber }}</dd>
@@ -231,7 +249,10 @@ function viewDocument(documentId) {
                                 </template>
                             </Card>
                             <Card>
-                                <template #title>Vehicle</template>
+                                <template #title>
+                                    Vehicle
+                                    <hr />
+                                </template>
                                 <template #content>
                                     <dl class="grid grid-cols-[repeat(2,auto)] gap-x-4 w-max">
                                         <dt>VIN:</dt><dd>{{ citation.vehicleNumber }}</dd>
