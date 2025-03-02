@@ -12,8 +12,8 @@ const toast = useToast();
 const authStore = useAuthStore();
 
 const formFields = ref({
-    username: 'cwilson',
-    password: 'abcd1234',
+    username: import.meta.env.VITE_DEFAULT_USERNAME,
+    password: import.meta.env.VITE_DEFAULT_PASSWORD,
     remember: true
 })
 const isLoggingIn = ref(false);

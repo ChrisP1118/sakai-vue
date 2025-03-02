@@ -5,6 +5,8 @@ env:
   APP_LOCATION: "/dist" # location of your client code
   OUTPUT_LOCATION: "build" # location of client code build output
   VITE_API_BASE_URL: https://dev-wisconsinticket.azurewebsites.net/api
+  VITE_DEFAULT_USERNAME: 
+  VITE_DEFAULT_PASSWORD:
 
 on:
   workflow_dispatch:
