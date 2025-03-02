@@ -26,6 +26,7 @@ const model = ref([
         label: 'Admin',
         items: [
             { label: 'Users', icon: 'pi pi-fw pi-user', to: '/users' },
+            { label: 'Inbound Simulator', icon: 'pi pi-fw pi-inbox', to: '/inboundSimulator' },
             { label: 'Debug', icon: 'pi pi-fw pi-wrench', to: '/debug' },
         ]
     },

@@ -134,6 +134,11 @@ const router = createRouter({
                 //     component: () => import('@/views/pages/tenants/Edit.vue')
                 // },
                 {
+                    path: '/inboundSimulator',
+                    name: 'inboundSimulator',
+                    component: () => import('@/views/pages/InboundSimulator.vue')
+                },
+                {
                     path: '/debug',
                     name: 'debug',
                     component: () => import('@/views/pages/Debug.vue')
