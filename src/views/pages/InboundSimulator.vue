@@ -3,17 +3,20 @@ import { onMounted, ref, computed, watch, onUnmounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth.js';
 import { Form } from '@primevue/forms';
+import { useToast } from 'primevue/usetoast';
 
 const router = useRouter()
 const route = useRoute()
 const authStore = useAuthStore();
+const toast = useToast();
 
 const file = ref();
 const formFields = ref({
     phoneNumber: '5555550010',
     message: '',
     files: null
-})
+});
+const isSending = ref(false);
 
 const formResolver = ({ values }) => {
     const errors = { name: [] };
@@ -36,12 +39,24 @@ const onSend = (e) => {
 
     console.log(formData);
 
+    isSending.value = true;
+
     fetch(import.meta.env.VITE_API_BASE_URL + '/v1/intake/inbound', {
         method: 'POST',
         body: formData
     })
     .then(response => {
-        file.value.files.clear();
+        isSending.value = false;
+        
+        toast.add({
+            severity: 'success',
+            summary: 'Message sent.',
+            life: 3000
+        });
+        
+        formFields.value.message = '';
+        formFields.value.files = null;
+
     });
 
 }
@@ -81,7 +96,7 @@ const onSend = (e) => {
                     </template>
                 </FileUpload>
 
-                <Button type="submit" label="Send" class="w-full"></Button>
+                <Button type="submit" label="Send" class="w-full" :loading="isSending"></Button>
             </Form>
 
         </Fluid>     
