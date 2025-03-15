@@ -144,7 +144,7 @@ watch(route, (to) => {
                 </Tab>
                 <Tab value="1" as="div" class="flex items-center gap-2">
                     <i class="pi pi-fw pi-ticket" />
-                    <span class="font-bold whitespace-nowrap">{{ item && citationID && citationId == item.activeCitationId ? 'Active Citation' : 'Citation' }}</span>
+                    <span class="font-bold whitespace-nowrap">{{ item && citationId && citationId == item.activeCitationId ? 'Active Citation' : 'Citation' }}</span>
                 </Tab>
                 <Tab value="2" as="div" class="flex items-center gap-2">
                     <i class="pi pi-fw pi-inbox" />
