@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, computed, useTemplateRef } from 'vue';
+import { onMounted, ref, computed, useTemplateRef, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router'
 import { useToast } from 'primevue/usetoast';
 import { useFetchApi } from '@/utilities/ApiFetch';
@@ -8,6 +8,7 @@ import CitationsList from './citations/All.vue';
 import MessagesList from './messages/All.vue';
 import DocumentsList from './documents/All.vue';
 import { DateTime } from "luxon";
+import { useConfirm } from "primevue/useconfirm";
 
 const router = useRouter()
 const route = useRoute()
@@ -21,6 +22,8 @@ const citation = ref(null);
 const messages = ref(null);
 const documentSrcs = ref({});
 const newMessageText = ref("");
+const confirm = useConfirm();
+const tabIndex = ref("0");
 
 onMounted(() => {
     loadItem();
@@ -85,11 +88,55 @@ function viewDocument(documentId) {
     router.push('/customers/' + id.value + '/documents/' + documentId);
 }
 
+const confirmClose = (event) => {
+    console.log('close');
+    confirm.require({
+        target: event.currentTarget,
+        message: 'Are you sure you want to close this citation?',
+        icon: 'pi pi-exclamation-triangle',
+        rejectProps: {
+            label: 'Leave Citation Active',
+            severity: 'secondary',
+            outlined: true
+        },
+        acceptProps: {
+            label: 'Close Citation'
+        },
+        accept: () => {
+            fetchPost('/v1/intake/close', {
+                customerId: id.value,
+                citationId: citationId.value,
+            })
+            .then(response => {
+                toast.add({
+                    severity: 'success',
+                    summary: 'Citation closed.',
+                    life: 3000
+                });
+
+                loadItem();
+            })
+        },
+        reject: () => {
+        }
+    });
+};
+
+watch(route, (to) => {
+    id.value  = to.params.customerId;
+    citationId.value = to.params.citationId;
+
+    loadItem();
+    loadMessages();
+
+    tabIndex.value = '1';
+}, {flush: 'pre', immediate: true, deep: true});
+
 </script>
 
 <template>
     <Fluid>
-        <Tabs value="0">
+        <Tabs v-model:value="tabIndex">
             <TabList>
                 <Tab value="0" as="div" class="flex items-center gap-2">
                     <i class="pi pi-fw pi-user" />
@@ -97,7 +144,7 @@ function viewDocument(documentId) {
                 </Tab>
                 <Tab value="1" as="div" class="flex items-center gap-2">
                     <i class="pi pi-fw pi-ticket" />
-                    <span class="font-bold whitespace-nowrap">{{ item && citationId == item.activeCitationId ? 'Active Citation' : 'Citation' }}</span>
+                    <span class="font-bold whitespace-nowrap">{{ item && citationID && citationId == item.activeCitationId ? 'Active Citation' : 'Citation' }}</span>
                 </Tab>
                 <Tab value="2" as="div" class="flex items-center gap-2">
                     <i class="pi pi-fw pi-inbox" />
@@ -122,17 +169,22 @@ function viewDocument(documentId) {
                         <template #title><i class="pi pi-fw pi-user" /> Customer</template>
                         <template #content>
                             <dl class="grid grid-cols-[repeat(2,auto)] gap-x-4 w-max">
-                                <dt>Phone Number:</dt><dd>{{ item.phoneNumber }}</dd>
+                                <dt>Phone Number:</dt>
+                                <dd>{{ item.phoneNumber.replace(/\D+/g, '').replace(/(\d)(\d{3})(\d{3})(\d{4})/, '($2) $3-$4') }}</dd>
                             </dl>
                         </template>
                     </Card>
                 </TabPanel>
                 <TabPanel value="1" as="p" class="m-0">
+                    <div v-if="!citation">
+                        No active citation
+                    </div>
                     <div v-if="citation">
                         <div class="grid grid-cols-3 gap-4">
                             <Card>
                                 <template #title>
-                                    Citation
+                                    <Message v-if="item && citationId == item.activeCitationId" severity="success">Active Citation</Message>
+                                    <Message v-if="item && citationId != item.activeCitationId" severity="error">Inactive Citation</Message>
                                     <hr />
                                 </template>
                                 <template #content>
@@ -263,6 +315,24 @@ function viewDocument(documentId) {
                                     </dl>
                                 </template>
                             </Card>
+                            <ConfirmPopup></ConfirmPopup>
+                            <Card>
+                                <template #title>
+                                    Status
+                                    <hr />
+                                </template>
+                                <template #content>
+                                    <div v-if="item && citationId == item.activeCitationId">
+                                        Active citation
+                                        <hr />
+                                        <Button @click="confirmClose($event)" label="Close Citation" outlined></Button>
+                                    </div>
+                                    <div v-if="item && citationId != item.activeCitationId">
+                                        Not active citation
+                                    </div>
+                                </template>
+                            </Card>                        
+
                         </div>
                     </div>
                 </TabPanel>

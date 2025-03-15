@@ -75,7 +75,7 @@ function onRowClick(event) {
                     <!-- <InputMask v-model="filterModel.value" @input="filterCallback()" placeholder="Search by phone number" mask="(999) 999-9999" /> -->
                 </template>
                 <template #body="slotProps">
-                    {{ slotProps.data.phoneNumber.replace(/\D+/g, '').replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3') }}
+                    {{ slotProps.data.phoneNumber.replace(/\D+/g, '').replace(/(\d)(\d{3})(\d{3})(\d{4})/, '($2) $3-$4') }}
                 </template>
             </Column>
             <Column field="createdAt" header="Created At" sortable>
